@@ -1,43 +1,88 @@
-// Dispatcher View — Person 4 builds this out
-// Job: show open (Pending) requests and let dispatcher assign each to a rider
+import React, { useState } from 'react';
 
-import React, { useState, useEffect } from 'react';
-import { getDeliveries, assignRider } from '../api';
-import { socket } from '../socket';
+// Fake Data
+const fakeDeliveries = [
+  { id: "DEL-001", customerName: "John Kamau", address: "Westlands", item: "Laptop", status: "OPEN" },
+  { id: "DEL-002", customerName: "Mary Wanjiku", address: "Kilimani", item: "Medicine", status: "OPEN" }
+];
+
+const fakeRiders = [
+  { id: "R-001", name: "Brian" },
+  { id: "R-002", name: "David" },
+  { id: "R-003", name: "Peter" }
+];
 
 function DispatcherView() {
-  const [deliveries, setDeliveries] = useState([]);
+  // These act as the memory for your screen
+  const [selectedDelivery, setSelectedDelivery] = useState(null);
+  const [selectedRider, setSelectedRider] = useState("");
 
-  useEffect(() => {
-    getDeliveries().then((res) => setDeliveries(res.data));
-
-    // Live update when a new delivery comes in
-    socket.on('delivery-created', (newDelivery) => {
-      setDeliveries((prev) => [...prev, newDelivery]);
-    });
-
-    return () => socket.off('delivery-created');
-  }, []);
-
-  const handleAssign = async (deliveryId, riderId) => {
-    // TODO: replace with the logged-in dispatcher's real ID
-    await assignRider(deliveryId, { riderId, dispatcherId: 'DISPATCHER_ID_HERE' });
-  };
-
-  return (
-    <div>
-      <h2>Open Delivery Requests</h2>
-      <ul>
-        {deliveries.filter((d) => d.currentStatus === 'Pending').map((d) => (
-          <li key={d._id}>
-            {d.customerName} — {d.address}
-            {/* TODO: replace with a real rider dropdown once rider list is available */}
-            <button onClick={() => handleAssign(d._id, 'RIDER_ID_HERE')}>
-              Assign Rider
-            </button>
-          </li>
+  // VIEW 2: The Assignment Screen
+  if (selectedDelivery) {
+    return (
+      <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
+        <h2>Assign Delivery</h2>
+        <p><strong>Delivery:</strong> {selectedDelivery.id}</p>
+        <p><strong>Customer:</strong> {selectedDelivery.customerName}</p>
+        <hr />
+        
+        <h3>Select Rider:</h3>
+        {fakeRiders.map((rider) => (
+          <div key={rider.id} style={{ marginBottom: '10px' }}>
+            <label>
+              <input 
+                type="radio" 
+                name="rider" 
+                value={rider.id}
+                onChange={(e) => setSelectedRider(e.target.value)}
+              />
+              {' '}{rider.name}
+            </label>
+          </div>
         ))}
-      </ul>
+
+        <div style={{ marginTop: '20px' }}>
+          <button 
+            onClick={() => {
+              // This is the new alert logic!
+              alert(`Successfully assigned ${selectedDelivery.id} to Rider ${selectedRider}!`);
+              setSelectedDelivery(null); // Go back to the main list
+            }} 
+            style={{ padding: '5px 10px', marginRight: '10px', cursor: 'pointer' }}
+          >
+            CONFIRM ASSIGNMENT
+          </button>
+          <button 
+            onClick={() => setSelectedDelivery(null)} 
+            style={{ padding: '5px 10px', cursor: 'pointer' }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // VIEW 1: The Open Deliveries List
+  return (
+    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
+      <h1>REFLEX DISPATCHER</h1>
+      <h2>Open Deliveries</h2>
+      <hr />
+
+      {fakeDeliveries.map((delivery) => (
+        <div key={delivery.id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
+          <h3>#{delivery.id} - {delivery.item}</h3>
+          <p>Customer: {delivery.customerName}</p>
+          <p>Location: {delivery.address}</p>
+          <button 
+            onClick={() => setSelectedDelivery(delivery)}
+            style={{ padding: '5px 10px', cursor: 'pointer' }}
+          >
+            Assign Rider
+          </button>
+        </div>
+      ))}
     </div>
   );
 }
