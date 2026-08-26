@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="104" fill="#C85A32" />
+  <!-- Reflex Brand Wordmark Symbol -->
+  <path d="M144 368V144h128c53.019 0 96 32.235 96 72s-42.981 72-96 72H224l144 80h-81.333L144 288v80z" fill="#FAF7F2" />
+  <circle cx="384" cy="144" r="32" fill="#D97706" />
+  <!-- Inner counter of R -->
+  <path d="M272 224H224V184h48c17.673 0 32 8.954 32 20s-14.327 20-32 20z" fill="#C85A32" />
+</svg>
