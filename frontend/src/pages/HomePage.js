@@ -71,82 +71,113 @@ function HomePage() {
         )}
       </header>
 
-      {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-container">
-          <div className="hero-content">
-            <div className="hero-pill">
-              <span className="hero-pill-dot" aria-hidden="true"></span>
-              Built for Kenyan Retailers & Merchants
-            </div>
-            <h1 className="hero-title">
-              Deliver without the <span className="highlight-terracotta">delivery chaos.</span>
-            </h1>
-            <p className="hero-subtitle">
-              Reflex helps small retail shops, boutiques, and merchants log customer delivery requests instantly and maintain clear, end-to-end visibility — no more messy WhatsApp chats or lost phone calls.
-            </p>
+      {/* Hero Section — Photographic backdrop with overlaid content */}
+      <section className="hero-section hero-overlay-style">
+        {/* Background Image & Scrim Overlay */}
+        <div className="hero-backdrop" aria-hidden="true">
+          <img
+            src="/images/reflex-hero-delivery.jpg"
+            alt="Reflex delivery rider with parcel in Nairobi"
+            className="hero-backdrop-img"
+          />
+          <div className="hero-scrim-gradient"></div>
+        </div>
 
-            <div className="hero-cta-group">
-              <Link to="/retailer" className="btn-hero-primary" id="hero-send-delivery-btn">
-                <span>Send a Delivery</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
+        {/* Floating Live Indicator Badges */}
+        <div className="hero-floating-element hero-floating-left" aria-hidden="true">
+          <div className="hero-glass-badge">
+            <span className="badge-pulse-dot"></span>
+            <div className="badge-text-block">
+              <span className="badge-title">Live Dispatch Active</span>
+              <span className="badge-sub">Nairobi &amp; Environs</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="hero-floating-element hero-floating-right" aria-hidden="true">
+          <div className="hero-glass-badge">
+            <span className="badge-icon-check">✓</span>
+            <div className="badge-text-block">
+              <span className="badge-title">Status: Pending → Assigned</span>
+              <span className="badge-sub">Average dispatch: &lt; 2 mins</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="hero-container hero-overlay-content">
+          {/* Top Pill */}
+          <div className="hero-pill hero-pill-light">
+            <span className="hero-pill-dot" aria-hidden="true"></span>
+            Built for Kenyan Retailers, Merchants &amp; Riders
+          </div>
+
+          {/* Main Headline */}
+          <h1 className="hero-title hero-title-overlay">
+            DELIVER WITHOUT THE <span className="highlight-sunset">DELIVERY CHAOS.</span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="hero-subtitle hero-subtitle-overlay">
+            Reflex helps retail shops, boutiques, and merchants log customer deliveries instantly, dispatch verified riders, and maintain real-time visibility — no messy WhatsApp chats or lost calls.
+          </p>
+
+          {/* Central Quick-Dispatch Bar */}
+          <div className="hero-search-bar-wrapper">
+            <div className="hero-search-bar">
+              <span className="search-bar-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
                 </svg>
+              </span>
+              <input
+                type="text"
+                className="search-bar-input"
+                placeholder="Enter customer delivery address (e.g., Westlands, CBD, Kilimani)..."
+                readOnly
+                onClick={() => window.location.href = '/retailer'}
+                aria-label="Enter customer delivery destination"
+              />
+              <Link to="/retailer" className="btn-search-bar-cta" id="hero-send-delivery-btn">
+                <span>Send a Delivery</span>
+                <span className="btn-search-arrow" aria-hidden="true">→</span>
               </Link>
-              <a href="#how-it-works" className="btn-hero-secondary">
-                See How It Works
-              </a>
             </div>
 
-            {/* Quick Trust Highlights */}
-            <div className="hero-trust-row">
-              <div className="trust-item">
-                <span className="trust-icon" aria-hidden="true">⚡</span>
-                <span>Instant dispatch assignment</span>
-              </div>
-              <div className="trust-item">
-                <span className="trust-icon" aria-hidden="true">📍</span>
-                <span>Live status visibility</span>
-              </div>
-              <div className="trust-item">
-                <span className="trust-icon" aria-hidden="true">📦</span>
-                <span>Reliable doorstep handoffs</span>
-              </div>
+            {/* Quick Portal Access Pills */}
+            <div className="hero-quick-pills">
+              <Link to="/retailer" className="quick-pill quick-pill-primary">
+                <span className="quick-pill-icon" aria-hidden="true">📦</span>
+                <span>Retailer Order Desk</span>
+              </Link>
+              <Link to="/dispatcher" className="quick-pill">
+                <span className="quick-pill-icon" aria-hidden="true">⚡</span>
+                <span>Dispatcher Queue</span>
+              </Link>
+              <Link to="/rider" className="quick-pill">
+                <span className="quick-pill-icon" aria-hidden="true">🚴</span>
+                <span>Rider Portal</span>
+              </Link>
+              <a href="#how-it-works" className="quick-pill quick-pill-ghost">
+                <span className="quick-pill-icon" aria-hidden="true">ℹ️</span>
+                <span>See How It Works</span>
+              </a>
             </div>
           </div>
 
-          <div className="hero-visual">
-            <div className="hero-image-card">
-              <img
-                src="/images/reflex-hero-delivery.jpg"
-                alt="Friendly Reflex delivery rider with parcel in Nairobi"
-                className="hero-image"
-                loading="eager"
-              />
-              <div className="floating-badge floating-badge-top">
-                <div className="floating-badge-icon" aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                </div>
-                <div>
-                  <div className="floating-badge-title">Status: Pending → Assigned</div>
-                  <div className="floating-badge-desc">Rider dispatched instantly</div>
-                </div>
-              </div>
-              <div className="floating-badge floating-badge-bottom">
-                <div className="floating-badge-icon badge-icon-warm" aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                </div>
-                <div>
-                  <div className="floating-badge-title">Nairobi & Environs</div>
-                  <div className="floating-badge-desc">Accurate landmark delivery</div>
-                </div>
-              </div>
+          {/* Trust Highlights Row */}
+          <div className="hero-trust-row hero-trust-overlay">
+            <div className="trust-item">
+              <span className="trust-icon" aria-hidden="true">⚡</span>
+              <span>Instant dispatch assignment</span>
+            </div>
+            <div className="trust-item">
+              <span className="trust-icon" aria-hidden="true">📍</span>
+              <span>Live status tracking</span>
+            </div>
+            <div className="trust-item">
+              <span className="trust-icon" aria-hidden="true">📦</span>
+              <span>Secure doorstep verification</span>
             </div>
           </div>
         </div>
