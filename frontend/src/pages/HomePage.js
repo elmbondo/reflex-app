@@ -71,54 +71,33 @@ function HomePage() {
         )}
       </header>
 
-      {/* Hero Section — Photographic backdrop with overlaid content */}
+      {/* Hero Section — Photographic backdrop with subtle overlay */}
       <section className="hero-section hero-overlay-style">
-        {/* Background Image & Scrim Overlay */}
+        {/* Background Image & Subtle Overlay */}
         <div className="hero-backdrop" aria-hidden="true">
           <img
             src="/images/reflex-hero-delivery.jpg"
-            alt="Reflex delivery rider with parcel in Nairobi"
+            alt="Reflex delivery rider with parcel on motorcycle in Nairobi"
             className="hero-backdrop-img"
           />
-          <div className="hero-scrim-gradient"></div>
-        </div>
-
-        {/* Floating Live Indicator Badges */}
-        <div className="hero-floating-element hero-floating-left" aria-hidden="true">
-          <div className="hero-glass-badge">
-            <span className="badge-pulse-dot"></span>
-            <div className="badge-text-block">
-              <span className="badge-title">Live Dispatch Active</span>
-              <span className="badge-sub">Nairobi &amp; Environs</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="hero-floating-element hero-floating-right" aria-hidden="true">
-          <div className="hero-glass-badge">
-            <span className="badge-icon-check">✓</span>
-            <div className="badge-text-block">
-              <span className="badge-title">Status: Pending → Assigned</span>
-              <span className="badge-sub">Average dispatch: &lt; 2 mins</span>
-            </div>
-          </div>
+          <div className="hero-subtle-overlay"></div>
         </div>
 
         <div className="hero-container hero-overlay-content">
           {/* Top Pill */}
-          <div className="hero-pill hero-pill-light">
+          <div className="hero-pill hero-pill-solid">
             <span className="hero-pill-dot" aria-hidden="true"></span>
-            Built for Kenyan Retailers, Merchants &amp; Riders
+            Built for Kenyan Retailers &amp; Merchants
           </div>
 
           {/* Main Headline */}
           <h1 className="hero-title hero-title-overlay">
-            DELIVER WITHOUT THE <span className="highlight-sunset">DELIVERY CHAOS.</span>
+            Deliver without the <span className="highlight-sunset">delivery chaos.</span>
           </h1>
 
           {/* Subtitle */}
           <p className="hero-subtitle hero-subtitle-overlay">
-            Reflex helps retail shops, boutiques, and merchants log customer deliveries instantly, dispatch verified riders, and maintain real-time visibility — no messy WhatsApp chats or lost calls.
+            Reflex helps retail shops, boutiques, and merchants log customer deliveries instantly, dispatch verified riders, and maintain real-time visibility.
           </p>
 
           {/* Central Quick-Dispatch Bar */}
@@ -139,44 +118,69 @@ function HomePage() {
                 aria-label="Enter customer delivery destination"
               />
               <Link to="/retailer" className="btn-search-bar-cta" id="hero-send-delivery-btn">
-                <span>Send a Delivery</span>
-                <span className="btn-search-arrow" aria-hidden="true">→</span>
+                <span>Create a Delivery</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
               </Link>
             </div>
 
-            {/* Quick Portal Access Pills */}
+            {/* Quick Portal Access Pills with Professional SVG Icons */}
             <div className="hero-quick-pills">
               <Link to="/retailer" className="quick-pill quick-pill-primary">
-                <span className="quick-pill-icon" aria-hidden="true">📦</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
                 <span>Retailer Order Desk</span>
               </Link>
               <Link to="/dispatcher" className="quick-pill">
-                <span className="quick-pill-icon" aria-hidden="true">⚡</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
                 <span>Dispatcher Queue</span>
               </Link>
               <Link to="/rider" className="quick-pill">
-                <span className="quick-pill-icon" aria-hidden="true">🚴</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <circle cx="5.5" cy="17.5" r="3.5"></circle>
+                  <circle cx="18.5" cy="17.5" r="3.5"></circle>
+                  <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5L9 9l3-2 3 3h3"></path>
+                </svg>
                 <span>Rider Portal</span>
               </Link>
               <a href="#how-it-works" className="quick-pill quick-pill-ghost">
-                <span className="quick-pill-icon" aria-hidden="true">ℹ️</span>
-                <span>See How It Works</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <span>How It Works</span>
               </a>
             </div>
           </div>
 
-          {/* Trust Highlights Row */}
+          {/* Trust Highlights Row with Clean SVG Icons */}
           <div className="hero-trust-row hero-trust-overlay">
             <div className="trust-item">
-              <span className="trust-icon" aria-hidden="true">⚡</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
               <span>Instant dispatch assignment</span>
             </div>
             <div className="trust-item">
-              <span className="trust-icon" aria-hidden="true">📍</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
               <span>Live status tracking</span>
             </div>
             <div className="trust-item">
-              <span className="trust-icon" aria-hidden="true">📦</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
               <span>Secure doorstep verification</span>
             </div>
           </div>
@@ -257,19 +261,31 @@ function HomePage() {
 
               <div className="about-feature-list">
                 <div className="about-feature-item">
-                  <div className="feature-check" aria-hidden="true">✓</div>
+                  <div className="feature-check" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </div>
                   <div>
                     <strong>No upfront setup hardware:</strong> Works seamlessly directly in your mobile browser or as an installable PWA.
                   </div>
                 </div>
                 <div className="about-feature-item">
-                  <div className="feature-check" aria-hidden="true">✓</div>
+                  <div className="feature-check" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </div>
                   <div>
                     <strong>Landmark-friendly address input:</strong> Built for Kenyan addresses, building names, and estate landmarks.
                   </div>
                 </div>
                 <div className="about-feature-item">
-                  <div className="feature-check" aria-hidden="true">✓</div>
+                  <div className="feature-check" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </div>
                   <div>
                     <strong>Direct accountability:</strong> Clean records of all dispatched orders for reconciliation.
                   </div>
@@ -311,10 +327,22 @@ function HomePage() {
             </Link>
           </div>
           <div className="callout-perks">
-            <div className="perk-tag">✓ Instant Request Logging</div>
-            <div className="perk-tag">✓ Real-Time Order Queue</div>
-            <div className="perk-tag">✓ Duplicate Submission Safety</div>
-            <div className="perk-tag">✓ Mobile & Tablet Friendly</div>
+            <div className="perk-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Instant Request Logging</span>
+            </div>
+            <div className="perk-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Real-Time Order Queue</span>
+            </div>
+            <div className="perk-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Duplicate Submission Safety</span>
+            </div>
+            <div className="perk-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Mobile & Tablet Friendly</span>
+            </div>
           </div>
         </div>
       </section>
@@ -366,7 +394,7 @@ function HomePage() {
             <h4 className="footer-col-title">Community</h4>
             <a href="#retailers" className="footer-link">For Retailers</a>
             <a href="#riders" className="footer-link">For Riders</a>
-            <span className="footer-badge">Nairobi, Kenya 🇰🇪</span>
+            <span className="footer-badge">Nairobi, Kenya</span>
           </div>
 
           <div className="footer-links-col">
