@@ -22,7 +22,7 @@
       "purpose": "any maskable"
     }
   ],
-  "start_url": "/retailer",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "theme_color": "#C85A32",

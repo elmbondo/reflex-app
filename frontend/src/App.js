@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
 import RetailerView from './pages/RetailerView';
 import DispatcherView from './pages/DispatcherView';
 import RiderView from './pages/RiderView';
@@ -7,14 +8,8 @@ import RiderView from './pages/RiderView';
 function App() {
   return (
     <BrowserRouter>
-      <nav>
-        {/* Temporary nav for testing — replace with real login/role routing later */}
-        <Link to="/retailer">Retailer</Link> |{' '}
-        <Link to="/dispatcher">Dispatcher</Link> |{' '}
-        <Link to="/rider">Rider</Link>
-      </nav>
-
       <Routes>
+        <Route path="/" element={<HomePage />} />
         <Route path="/retailer" element={<RetailerView />} />
         <Route path="/dispatcher" element={<DispatcherView />} />
         <Route path="/rider" element={<RiderView />} />
