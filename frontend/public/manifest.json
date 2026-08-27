@@ -1,0 +1,32 @@
+{
+  "short_name": "Reflex",
+  "name": "Reflex Delivery Tracking",
+  "description": "Delivery tracking and coordination platform for Kenyan retailers.",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/retailer",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#C85A32",
+  "background_color": "#FAF7F2",
+  "orientation": "portrait-primary",
+  "categories": ["business", "productivity", "utilities"]
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <rect width="192" height="192" rx="40" fill="#C85A32" />
+  <!-- Reflex R Logomark with Logistics Arrow -->
+  <path d="M54 138V54h48c19.882 0 36 12.088 36 27s-16.118 27-36 27H84l54 30h-30.5L54 108v30z" fill="#FAF7F2" />
+  <circle cx="144" cy="54" r="12" fill="#D97706" />
+  <!-- Inner counter of R -->
+  <path d="M102 84H84V68h18c6.627 0 12 3.582 12 8s-5.373 8-12 8z" fill="#C85A32" />
+</svg>
