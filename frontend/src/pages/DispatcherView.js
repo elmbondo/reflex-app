@@ -12,22 +12,33 @@ function DispatcherView() {
     { id: "R-003", name: "Peter" }
   ];
 
-  // Fetching the real data
+  // Fetching the real data with our new SAFETY NET
   useEffect(() => {
     const loadDeliveries = async () => {
       try {
-        const data = await getDeliveries(); 
-        console.log("Data from api.js:", data);
-        setDeliveries(data);
+        const response = await getDeliveries(); 
+        console.log("Full response from API:", response);
+        
+        // FIX: Look inside the "shipping box" for the actual array!
+        if (response && Array.isArray(response.data)) {
+          setDeliveries(response.data);
+        } else if (Array.isArray(response)) {
+          // Just in case api.js unwraps it later
+          setDeliveries(response);
+        } else {
+          console.log("Warning: Could not find the array. Data is:", response);
+          setDeliveries([]); 
+        }
       } catch (error) {
         console.log("Error loading deliveries from API:", error);
+        setDeliveries([]); // Fallback to empty list on error
       }
     };
 
     loadDeliveries();
   }, []);
 
-  // VIEW 2: The Assignment Screen (This is where the button is!)
+  // VIEW 2: The Assignment Screen
   if (selectedDelivery) {
     return (
       <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
@@ -52,7 +63,6 @@ function DispatcherView() {
         ))}
 
         <div style={{ marginTop: '20px' }}>
-          {/* THE UPDATED ASYNC BUTTON*/}
           <button 
             onClick={async () => {
               try {
@@ -93,7 +103,8 @@ function DispatcherView() {
       ) : (
         deliveries.map((delivery) => (
           <div key={delivery._id || delivery.id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
-            <h3>{delivery.item}</h3>
+            {/* Added fallback to itemDescription based on your DB JSON */}
+            <h3>{delivery.item || delivery.itemDescription}</h3>
             <p>Customer: {delivery.customerName}</p>
             <p>Location: {delivery.address}</p>
             <button 
@@ -110,3 +121,4 @@ function DispatcherView() {
 }
 
 export default DispatcherView;
+
