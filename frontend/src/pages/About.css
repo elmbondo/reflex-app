@@ -1,0 +1,153 @@
+.about-page {
+  min-height: 100vh;
+  background-color: #fdfbf7;
+  color: #2d2d2d;
+}
+
+.about-hero {
+  background: linear-gradient(135deg, #e05e36 0%, #c84f2b 100%);
+  color: white;
+  padding: 80px 24px;
+}
+
+.about-hero-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.about-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+}
+
+.about-headline {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.about-lead {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  line-height: 1.7;
+}
+
+.about-section {
+  padding: 60px 24px;
+}
+
+.about-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.about-content h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin-top: 40px;
+  margin-bottom: 14px;
+}
+
+.about-content h2:first-child { margin-top: 0; }
+
+.about-content p {
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 24px;
+}
+
+.about-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.about-card {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.about-card-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.about-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e05e36;
+  margin-bottom: 8px;
+}
+
+.about-card p {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.about-feature-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 40px;
+}
+
+.about-feature-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0ede5;
+  color: #444;
+  line-height: 1.5;
+}
+
+.about-cta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+
+.btn-about-primary {
+  background: #e05e36;
+  color: white;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.btn-about-primary:hover { background: #c84f2b; }
+
+.btn-about-secondary {
+  background: white;
+  border: 2px solid #e05e36;
+  color: #e05e36;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-about-secondary:hover { background: #e05e36; color: white; }
