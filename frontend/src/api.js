@@ -12,3 +12,11 @@ export const getDeliveries = () => api.get('/deliveries');
 export const createDelivery = (data) => api.post('/deliveries', data);
 export const assignRider = (id, data) => api.patch(`/deliveries/${id}/assign`, data);
 export const updateStatus = (id, data) => api.patch(`/deliveries/${id}/status`, data);
+
+// Fetch all riders from the backend
+export const getRiders = async () => {
+ // We swapped the variable for the exact local server URL
+  const response = await axios.get('http://localhost:5000/api/riders');
+  return response.data;
+};
+

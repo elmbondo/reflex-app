@@ -26,6 +26,21 @@ app.get('/', (req, res) => {
 // --- Routes ---
 app.use('/api/deliveries', require('./routes/deliveries'));
 
+// TODO (Person 3): I added this temporary schema and route here to unblock 
+// the frontend assignment testing. Feel free to move this to the routes folder!
+const userSchema = new mongoose.Schema({ name: String, role: String, phone: String });
+const User = mongoose.models.User || mongoose.model('User', userSchema);
+
+app.get('/api/riders', async (req, res) => {
+  try {
+    const riders = await User.find({ role: 'rider' }); 
+    res.status(200).json(riders);
+  } catch (error) {
+    console.error("Error fetching riders:", error);
+    res.status(500).json({ message: "Server error fetching riders" });
+  }
+});
+
 // --- Socket.io setup (Person 5 builds on this) ---
 const server = http.createServer(app);
 const io = new Server(server, {
