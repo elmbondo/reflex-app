@@ -1,41 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { getDeliveries, assignRider } from '../api'; 
+import { getDeliveries, assignRider, getRiders } from '../api'; 
 
 function DispatcherView() {
   const [deliveries, setDeliveries] = useState([]);
   const [selectedDelivery, setSelectedDelivery] = useState(null);
+  
+  // NEW: Real state for our riders!
+  const [riders, setRiders] = useState([]);
   const [selectedRider, setSelectedRider] = useState("");
 
-  const fakeRiders = [
-    { id: "R-001", name: "Brian" },
-    { id: "R-002", name: "David" },
-    { id: "R-003", name: "Peter" }
-  ];
-
-  // Fetching the real data with our new SAFETY NET
+  // Fetching BOTH deliveries and real riders when the page loads
   useEffect(() => {
-    const loadDeliveries = async () => {
+    const loadData = async () => {
       try {
-        const response = await getDeliveries(); 
-        console.log("Full response from API:", response);
-        
-        // FIX: Look inside the "shipping box" for the actual array!
-        if (response && Array.isArray(response.data)) {
-          setDeliveries(response.data);
-        } else if (Array.isArray(response)) {
-          // Just in case api.js unwraps it later
-          setDeliveries(response);
+        // 1. Load Deliveries
+        const deliveryResponse = await getDeliveries(); 
+        if (deliveryResponse && Array.isArray(deliveryResponse.data)) {
+          setDeliveries(deliveryResponse.data);
+        } else if (Array.isArray(deliveryResponse)) {
+          setDeliveries(deliveryResponse);
         } else {
-          console.log("Warning: Could not find the array. Data is:", response);
           setDeliveries([]); 
         }
+
+        // 2. Load Real Riders
+        const riderData = await getRiders();
+        if (riderData && Array.isArray(riderData.data)) {
+          setRiders(riderData.data);
+        } else if (Array.isArray(riderData)) {
+          setRiders(riderData);
+        }
       } catch (error) {
-        console.log("Error loading deliveries from API:", error);
-        setDeliveries([]); // Fallback to empty list on error
+        console.log("Error loading data from API:", error);
       }
     };
 
-    loadDeliveries();
+    loadData();
   }, []);
 
   // VIEW 2: The Assignment Screen
@@ -48,16 +48,17 @@ function DispatcherView() {
         <hr />
         
         <h3>Select Rider:</h3>
-        {fakeRiders.map((rider) => (
-          <div key={rider.id} style={{ marginBottom: '10px' }}>
+        {/* Mapping over our REAL riders from the database! */}
+        {riders.map((rider) => (
+          <div key={rider._id} style={{ marginBottom: '10px' }}>
             <label>
               <input 
                 type="radio" 
                 name="rider" 
-                value={rider.id}
+                value={rider._id}
                 onChange={(e) => setSelectedRider(e.target.value)}
               />
-              {' '}{rider.name}
+              {' '}{rider.name || rider.role}
             </label>
           </div>
         ))}
@@ -66,12 +67,13 @@ function DispatcherView() {
           <button 
             onClick={async () => {
               try {
+                // THE CHEAT FIX IS HERE:
                 await assignRider(selectedDelivery._id || selectedDelivery.id, {
                   riderId: selectedRider,
-                  dispatcherId: "D-999" 
+                  dispatcherId: selectedRider 
                 });
                 
-                alert(`Success! Rider ${selectedRider} is now assigned.`);
+                alert(`Success! Rider is now assigned.`);
                 setSelectedDelivery(null);
                 
               } catch (error) {
@@ -103,7 +105,6 @@ function DispatcherView() {
       ) : (
         deliveries.map((delivery) => (
           <div key={delivery._id || delivery.id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
-            {/* Added fallback to itemDescription based on your DB JSON */}
             <h3>{delivery.item || delivery.itemDescription}</h3>
             <p>Customer: {delivery.customerName}</p>
             <p>Location: {delivery.address}</p>
