@@ -14,7 +14,7 @@ app.use(express.json());
 
 // --- Database connection ---
 // Person 2 sets the real connection string in a .env file (never commit that file)
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/reflex')
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
