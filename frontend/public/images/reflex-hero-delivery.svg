@@ -1,0 +1,236 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="100%" height="100%">
+  <defs>
+    <!-- Background Sky -->
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#EAE5DC"/>
+      <stop offset="60%" stop-color="#F2EDE4"/>
+      <stop offset="100%" stop-color="#E5DDD0"/>
+    </linearGradient>
+    
+    <!-- Sun & Horizon -->
+    <linearGradient id="warmLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FAF5EE" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#ECE3D4" stop-opacity="0.5"/>
+    </linearGradient>
+
+    <!-- Nairobi City Skyline Silhouette -->
+    <linearGradient id="cityFar" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#C5BCAD"/>
+      <stop offset="100%" stop-color="#B2A796"/>
+    </linearGradient>
+    <linearGradient id="cityMid" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9C907E"/>
+      <stop offset="100%" stop-color="#7D715F"/>
+    </linearGradient>
+
+    <!-- Asphalt Road -->
+    <linearGradient id="roadGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4A453E"/>
+      <stop offset="100%" stop-color="#2D2924"/>
+    </linearGradient>
+
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Sky Canvas -->
+  <rect width="1600" height="900" fill="url(#skyGrad)"/>
+
+  <!-- Distant Cityscape (Nairobi skyline: KICC tower, Times Tower, modern towers) -->
+  <g fill="url(#cityFar)" opacity="0.65">
+    <!-- Far buildings -->
+    <rect x="120" y="320" width="70" height="260" rx="3"/>
+    <rect x="210" y="280" width="85" height="300" rx="3"/>
+    <rect x="320" y="340" width="60" height="240" rx="2"/>
+    <rect x="400" y="230" width="95" height="350" rx="4"/>
+    <!-- KICC shape hint -->
+    <path d="M435 230 L450 140 L460 140 L475 230 Z"/>
+    <rect x="453" y="90" width="4" height="50"/>
+    <rect x="520" y="310" width="75" height="270" rx="3"/>
+    <rect x="615" y="260" width="110" height="320" rx="4"/>
+    <rect x="750" y="330" width="65" height="250" rx="2"/>
+    <rect x="835" y="240" width="100" height="340" rx="4"/>
+    <rect x="960" y="300" width="80" height="280" rx="3"/>
+    <rect x="1060" y="220" width="90" height="360" rx="4"/>
+    <rect x="1170" y="290" width="70" height="290" rx="3"/>
+    <rect x="1260" y="330" width="110" height="250" rx="3"/>
+    <rect x="1390" y="270" width="85" height="310" rx="3"/>
+  </g>
+
+  <!-- Midground City Buildings & Trees -->
+  <g fill="url(#cityMid)" opacity="0.85">
+    <rect x="50" y="380" width="130" height="200" rx="4"/>
+    <rect x="195" y="350" width="110" height="230" rx="4"/>
+    <rect x="330" y="390" width="120" height="190" rx="4"/>
+    <rect x="480" y="360" width="140" height="220" rx="4"/>
+    <rect x="650" y="340" width="125" height="240" rx="4"/>
+    <rect x="800" y="370" width="135" height="210" rx="4"/>
+    <rect x="960" y="350" width="115" height="230" rx="4"/>
+    <rect x="1100" y="330" width="145" height="250" rx="4"/>
+    <rect x="1270" y="370" width="130" height="210" rx="4"/>
+    <rect x="1420" y="360" width="140" height="220" rx="4"/>
+    
+    <!-- Building Windows Details -->
+    <g fill="#FAF7F2" opacity="0.3">
+      <rect x="70" y="400" width="12" height="16" rx="1"/>
+      <rect x="95" y="400" width="12" height="16" rx="1"/>
+      <rect x="120" y="400" width="12" height="16" rx="1"/>
+      <rect x="70" y="430" width="12" height="16" rx="1"/>
+      <rect x="95" y="430" width="12" height="16" rx="1"/>
+      <rect x="120" y="430" width="12" height="16" rx="1"/>
+
+      <rect x="215" y="380" width="14" height="20" rx="1"/>
+      <rect x="245" y="380" width="14" height="20" rx="1"/>
+      <rect x="275" y="380" width="14" height="20" rx="1"/>
+      <rect x="215" y="420" width="14" height="20" rx="1"/>
+      <rect x="245" y="420" width="14" height="20" rx="1"/>
+      <rect x="275" y="420" width="14" height="20" rx="1"/>
+
+      <rect x="670" y="370" width="15" height="22" rx="1"/>
+      <rect x="705" y="370" width="15" height="22" rx="1"/>
+      <rect x="740" y="370" width="15" height="22" rx="1"/>
+      <rect x="670" y="410" width="15" height="22" rx="1"/>
+      <rect x="705" y="410" width="15" height="22" rx="1"/>
+      <rect x="740" y="410" width="15" height="22" rx="1"/>
+
+      <rect x="1125" y="360" width="16" height="24" rx="1"/>
+      <rect x="1160" y="360" width="16" height="24" rx="1"/>
+      <rect x="1195" y="360" width="16" height="24" rx="1"/>
+    </g>
+
+    <!-- Jacaranda / Acacia Greenery along street -->
+    <ellipse cx="180" cy="560" rx="45" ry="30" fill="#3D4A38"/>
+    <ellipse cx="460" cy="565" rx="55" ry="32" fill="#323E2E"/>
+    <ellipse cx="780" cy="560" rx="50" ry="30" fill="#3D4A38"/>
+    <ellipse cx="1080" cy="565" rx="60" ry="34" fill="#323E2E"/>
+    <ellipse cx="1380" cy="560" rx="50" ry="30" fill="#3D4A38"/>
+  </g>
+
+  <!-- Pavement / Curb -->
+  <rect x="0" y="560" width="1600" height="25" fill="#B3A796"/>
+  <rect x="0" y="580" width="1600" height="10" fill="#918575"/>
+
+  <!-- Tarmac Road -->
+  <rect x="0" y="585" width="1600" height="315" fill="url(#roadGrad)"/>
+
+  <!-- Road Lane Markings (Dashed Yellow / White) -->
+  <g fill="#F3CA3E" opacity="0.85">
+    <rect x="60" y="730" width="140" height="14" rx="4" transform="skewX(-24)"/>
+    <rect x="340" y="730" width="140" height="14" rx="4" transform="skewX(-24)"/>
+    <rect x="620" y="730" width="140" height="14" rx="4" transform="skewX(-24)"/>
+    <rect x="900" y="730" width="140" height="14" rx="4" transform="skewX(-24)"/>
+    <rect x="1180" y="730" width="140" height="14" rx="4" transform="skewX(-24)"/>
+    <rect x="1460" y="730" width="140" height="14" rx="4" transform="skewX(-24)"/>
+  </g>
+
+  <!-- Ground Shadow under Bike -->
+  <ellipse cx="880" cy="815" rx="290" ry="42" fill="#0E0C0A" opacity="0.6" filter="url(#subtleShadow)"/>
+
+  <!-- Delivery Motorcycle & Rider Illustration Group (Rich, Solid Colors) -->
+  <g transform="translate(620, 360)">
+    
+    <!-- Rear Wheel -->
+    <g transform="translate(60, 380)">
+      <circle cx="0" cy="0" r="76" fill="#1C1917"/>
+      <circle cx="0" cy="0" r="58" fill="#3A3530"/>
+      <circle cx="0" cy="0" r="46" fill="#1C1917"/>
+      <!-- Spokes & Hub -->
+      <circle cx="0" cy="0" r="22" fill="#8C8275"/>
+      <circle cx="0" cy="0" r="10" fill="#EAE3D2"/>
+      <line x1="-42" y1="0" x2="42" y2="0" stroke="#78716C" stroke-width="4"/>
+      <line x1="0" y1="-42" x2="0" y2="42" stroke="#78716C" stroke-width="4"/>
+      <line x1="-30" y1="-30" x2="30" y2="30" stroke="#78716C" stroke-width="4"/>
+      <line x1="-30" y1="30" x2="30" y2="-30" stroke="#78716C" stroke-width="4"/>
+    </g>
+
+    <!-- Front Wheel -->
+    <g transform="translate(420, 380)">
+      <circle cx="0" cy="0" r="76" fill="#1C1917"/>
+      <circle cx="0" cy="0" r="58" fill="#3A3530"/>
+      <circle cx="0" cy="0" r="46" fill="#1C1917"/>
+      <!-- Spokes & Hub -->
+      <circle cx="0" cy="0" r="22" fill="#8C8275"/>
+      <circle cx="0" cy="0" r="10" fill="#EAE3D2"/>
+      <line x1="-42" y1="0" x2="42" y2="0" stroke="#78716C" stroke-width="4"/>
+      <line x1="0" y1="-42" x2="0" y2="42" stroke="#78716C" stroke-width="4"/>
+      <line x1="-30" y1="-30" x2="30" y2="30" stroke="#78716C" stroke-width="4"/>
+      <line x1="-30" y1="30" x2="30" y2="-30" stroke="#78716C" stroke-width="4"/>
+    </g>
+
+    <!-- Motorcycle Frame & Engine -->
+    <g stroke="#262320" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="60" y1="380" x2="190" y2="340"/> <!-- Rear swingarm -->
+      <line x1="190" y1="340" x2="290" y2="250"/> <!-- Main frame diagonal -->
+      <line x1="190" y1="340" x2="260" y2="380"/> <!-- Lower cradle -->
+      <line x1="260" y1="380" x2="360" y2="310"/> <!-- Front down tube -->
+      <line x1="360" y1="310" x2="385" y2="210"/> <!-- Head tube -->
+      <line x1="385" y1="210" x2="420" y2="380"/> <!-- Front fork -->
+    </g>
+
+    <!-- Engine Block & Exhaust -->
+    <rect x="200" y="320" width="90" height="65" rx="10" fill="#403B35"/>
+    <rect x="215" y="335" width="60" height="10" rx="3" fill="#6B6359"/>
+    <rect x="215" y="355" width="60" height="10" rx="3" fill="#6B6359"/>
+    <!-- Chrome Exhaust Pipe -->
+    <path d="M260 365 C 290 395, 140 400, 30 390" fill="none" stroke="#A89F91" stroke-width="14" stroke-linecap="round"/>
+    <path d="M120 395 L 25 390" fill="none" stroke="#E5DDD0" stroke-width="18" stroke-linecap="round"/>
+
+    <!-- Fuel Tank (Warm Terracotta Brand Finish) -->
+    <path d="M250 250 C 260 215, 330 210, 370 235 C 375 250, 350 270, 270 268 Z" fill="#C85A32"/>
+    <!-- Tank Highlight / Accent -->
+    <path d="M270 230 C 290 222, 335 224, 355 240" fill="none" stroke="#FAF7F2" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+
+    <!-- Seat & Mudguards -->
+    <path d="M130 265 C 170 260, 240 260, 260 268 L 245 285 L 140 285 Z" fill="#1C1917" rx="6"/>
+    <path d="M380 330 C 405 315, 435 320, 450 345" fill="none" stroke="#C85A32" stroke-width="12" stroke-linecap="round"/>
+
+    <!-- Headlight & Handlebars -->
+    <circle cx="420" cy="210" r="20" fill="#FDF8ED" stroke="#3A3530" stroke-width="5"/>
+    <path d="M385 200 L 360 170 L 330 175" fill="none" stroke="#1C1917" stroke-width="8" stroke-linecap="round"/>
+
+    <!-- Reflex Branded Courier Delivery Box (Solid Terracotta / Clean Finish) -->
+    <g transform="translate(10, 130)">
+      <!-- Box Body -->
+      <rect x="0" y="0" width="150" height="135" rx="14" fill="#C85A32" stroke="#B24E2A" stroke-width="4"/>
+      <!-- Top Flap -->
+      <rect x="-4" y="-8" width="158" height="22" rx="6" fill="#B24E2A"/>
+      <rect x="6" y="24" width="138" height="95" rx="8" fill="#FAF7F2"/>
+      
+      <!-- Reflex Lightning Bolt & Logo on Box -->
+      <g transform="translate(30, 40)">
+        <polygon points="18 4 6 22 18 22 16 34 30 16 18 16 20 4" fill="#C85A32"/>
+        <text x="36" y="24" font-family="'Plus Jakarta Sans', sans-serif" font-size="18" font-weight="900" fill="#1C1917" letter-spacing="-0.5">REFLEX</text>
+        <text x="8" y="52" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" fill="#78716C" letter-spacing="1">EXPRESS DISPATCH</text>
+      </g>
+    </g>
+
+    <!-- Courier Rider Figure -->
+    <!-- Legs & Boots -->
+    <g fill="#292524">
+      <!-- Back leg -->
+      <path d="M200 270 L 190 350 L 230 365 L 245 345 L 220 335 L 225 270 Z" rx="8"/>
+      <!-- Front boot -->
+      <path d="M225 355 L 255 355 L 255 375 L 215 375 Z" fill="#1C1917" rx="3"/>
+    </g>
+
+    <!-- Torso / Courier Jacket (Professional Dark Charcoal with Terracotta Trim) -->
+    <path d="M195 160 C 230 150, 270 170, 280 230 L 210 270 L 175 220 Z" fill="#292524" rx="12"/>
+    <!-- Jacket Hi-Vis Stripe (Solid Terracotta & Warm Sand) -->
+    <path d="M210 175 L 270 200" stroke="#C85A32" stroke-width="10" stroke-linecap="round"/>
+    <path d="M200 215 L 255 235" stroke="#FAF7F2" stroke-width="6" stroke-linecap="round"/>
+
+    <!-- Arm reaching to handlebar -->
+    <path d="M245 180 Q 295 190 340 180" fill="none" stroke="#292524" stroke-width="24" stroke-linecap="round"/>
+    <!-- Gloved Hand -->
+    <circle cx="342" cy="180" r="14" fill="#1C1917"/>
+
+    <!-- Helmet & Visor -->
+    <circle cx="245" cy="115" r="34" fill="#C85A32"/>
+    <path d="M225 90 C 255 80, 280 100, 275 135 C 250 145, 220 135, 225 90 Z" fill="#C85A32"/>
+    <!-- Visor (Gloss Dark) -->
+    <path d="M250 105 C 275 105, 280 125, 260 132 Z" fill="#1C1917" stroke="#FAF7F2" stroke-width="2"/>
+    <!-- Helmet Chin Strap -->
+    <path d="M235 130 Q 248 148 260 138" fill="none" stroke="#1C1917" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

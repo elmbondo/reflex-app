@@ -5,7 +5,7 @@ import './HowItWorks.css';
 const steps = [
   {
     number: '01',
-    icon: '🏪',
+    iconType: 'retailer',
     title: 'Retailer Logs the Request',
     description:
       'The merchant opens their Retailer portal, fills in customer name, phone number, delivery address, and package description. The form validates all fields before sending.',
@@ -13,7 +13,7 @@ const steps = [
   },
   {
     number: '02',
-    icon: '📋',
+    iconType: 'dispatcher',
     title: 'Dispatcher Reviews the Queue',
     description:
       'The dispatcher sees the new request appear in their real-time queue. They review the details and assign the delivery to an available rider.',
@@ -21,7 +21,7 @@ const steps = [
   },
   {
     number: '03',
-    icon: '🏍️',
+    iconType: 'rider',
     title: 'Rider Picks Up the Package',
     description:
       'The assigned rider heads to the merchant, collects the package, and updates the status to "Picked Up" in their portal. The retailer sees this update live.',
@@ -29,13 +29,49 @@ const steps = [
   },
   {
     number: '04',
-    icon: '📦',
+    iconType: 'package',
     title: 'Customer Receives the Delivery',
     description:
       'The rider delivers the package to the customer\'s doorstep and marks it as "Delivered". A complete audit trail is recorded for the retailer.',
     detail: 'Full history stored per delivery for reconciliation.',
   },
 ];
+
+function StepIcon({ type }) {
+  switch (type) {
+    case 'retailer':
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+          <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>
+      );
+    case 'dispatcher':
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+      );
+    case 'rider':
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="5.5" cy="17.5" r="3.5"></circle>
+          <circle cx="18.5" cy="17.5" r="3.5"></circle>
+          <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5L9 9l3-2 3 3h3"></path>
+        </svg>
+      );
+    case 'package':
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
 
 function HowItWorks() {
   const [active, setActive] = useState(null);
@@ -66,12 +102,14 @@ function HowItWorks() {
             >
               <div className="hiw-step-number">{step.number}</div>
               <div className="hiw-step-body">
-                <div className="hiw-step-icon">{step.icon}</div>
+                <div className="hiw-step-icon" aria-hidden="true">
+                  <StepIcon type={step.iconType} />
+                </div>
                 <h3 className="hiw-step-title">{step.title}</h3>
                 <p className="hiw-step-desc">{step.description}</p>
                 {active === i && (
                   <div className="hiw-step-detail">
-                    <span>💡 </span>{step.detail}
+                    <span className="detail-tag">Key benefit:</span> {step.detail}
                   </div>
                 )}
               </div>

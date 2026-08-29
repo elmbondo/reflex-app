@@ -27,7 +27,7 @@
   left: 0;
   right: 0;
   height: 6px;
-  background: linear-gradient(90deg, var(--color-terracotta), var(--color-amber), var(--color-olive));
+  background-color: var(--color-terracotta);
 }
 
 .brand-badge {

@@ -2,6 +2,14 @@
 // Person 3 (Backend/API) builds routes here. Person 5 wires up real-time events.
 
 require('dotenv').config();
+const dns = require('dns');
+try {
+  // Use public DNS to ensure reliable MongoDB Atlas SRV query resolution on Windows
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch (e) {
+  console.warn('DNS server configuration warning:', e.message);
+}
+
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
@@ -13,9 +21,10 @@ app.use(cors());
 app.use(express.json());
 
 // --- Database connection ---
-// Person 2 sets the real connection string in a .env file (never commit that file)
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
+mongoose.connect(process.env.MONGO_URI, {
+  serverSelectionTimeoutMS: 5000,
+})
+  .then(() => console.log('MongoDB connected successfully to Atlas'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
 // --- Basic health check route (confirms server is running) ---
