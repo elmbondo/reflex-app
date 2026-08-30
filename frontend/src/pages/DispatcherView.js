@@ -5,50 +5,42 @@ function DispatcherView() {
   const [deliveries, setDeliveries] = useState([]);
   const [selectedDelivery, setSelectedDelivery] = useState(null);
   
-  // NEW: Real state for our riders!
   const [riders, setRiders] = useState([]);
   const [selectedRider, setSelectedRider] = useState("");
 
-  // Fetching BOTH deliveries and real riders when the page loads
   useEffect(() => {
     const loadData = async () => {
       try {
-        // 1. Load Deliveries
+        // 1. Load Deliveries 
         const deliveryResponse = await getDeliveries(); 
-        if (deliveryResponse && Array.isArray(deliveryResponse.data)) {
-          setDeliveries(deliveryResponse.data);
-        } else if (Array.isArray(deliveryResponse)) {
-          setDeliveries(deliveryResponse);
-        } else {
-          setDeliveries([]); 
-        }
+        setDeliveries(
+          Array.isArray(deliveryResponse.data) ? deliveryResponse.data : []
+        );
 
         // 2. Load Real Riders
         const riderData = await getRiders();
-        if (riderData && Array.isArray(riderData.data)) {
-          setRiders(riderData.data);
-        } else if (Array.isArray(riderData)) {
-          setRiders(riderData);
-        }
+        setRiders(
+          Array.isArray(riderData) ? riderData : []
+        );
+        
       } catch (error) {
         console.log("Error loading data from API:", error);
       }
     };
 
     loadData();
-  }, []);
+  }, []); // Empty dependency array means this runs once on page load
 
   // VIEW 2: The Assignment Screen
   if (selectedDelivery) {
     return (
       <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
         <h2>Assign Delivery</h2>
-        <p><strong>Delivery:</strong> {selectedDelivery._id || selectedDelivery.id}</p>
+        <p><strong>Delivery:</strong> {selectedDelivery._id}</p>
         <p><strong>Customer:</strong> {selectedDelivery.customerName}</p>
         <hr />
         
         <h3>Select Rider:</h3>
-        {/* Mapping over our REAL riders from the database! */}
         {riders.map((rider) => (
           <div key={rider._id} style={{ marginBottom: '10px' }}>
             <label>
@@ -67,10 +59,9 @@ function DispatcherView() {
           <button 
             onClick={async () => {
               try {
-                // THE CHEAT FIX IS HERE:
-                await assignRider(selectedDelivery._id || selectedDelivery.id, {
+                await assignRider(selectedDelivery._id, {
                   riderId: selectedRider,
-                  dispatcherId: selectedRider 
+                  dispatcherId: process.env.REACT_APP_DISPATCHER_ID
                 });
                 
                 alert(`Success! Rider is now assigned.`);
@@ -104,8 +95,8 @@ function DispatcherView() {
         <p>No open deliveries found. Waiting for a retailer to create one!</p>
       ) : (
         deliveries.map((delivery) => (
-          <div key={delivery._id || delivery.id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
-            <h3>{delivery.item || delivery.itemDescription}</h3>
+          <div key={delivery._id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
+            <h3>{delivery.itemDescription}</h3>
             <p>Customer: {delivery.customerName}</p>
             <p>Location: {delivery.address}</p>
             <button 
@@ -122,4 +113,3 @@ function DispatcherView() {
 }
 
 export default DispatcherView;
-

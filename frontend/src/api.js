@@ -15,8 +15,7 @@ export const updateStatus = (id, data) => api.patch(`/deliveries/${id}/status`, 
 
 // Fetch all riders from the backend
 export const getRiders = async () => {
- // We swapped the variable for the exact local server URL
-  const response = await axios.get('http://localhost:5000/api/riders');
+  const response = await api.get('/riders');
   return response.data;
 };
 

@@ -22,8 +22,11 @@ function RiderView() {
   }, []);
 
   const handleStatusUpdate = async (deliveryId, status) => {
-    // TODO: replace with the logged-in rider's real ID
-    await updateStatus(deliveryId, { status, changedBy: 'RIDER_ID_HERE' });
+    // Now using the real environment variable instead of the fake ID!
+    await updateStatus(deliveryId, { 
+      status, 
+      changedBy: process.env.REACT_APP_RIDER_ID 
+    });
   };
 
   return (
@@ -31,7 +34,12 @@ function RiderView() {
       <h2>My Assigned Deliveries</h2>
       <ul>
         {deliveries
-          .filter((d) => d.currentStatus === 'Assigned' || d.currentStatus === 'Picked Up')
+          .filter((d) => 
+            // 1. Must be Assigned or Picked Up
+            (d.currentStatus === 'Assigned' || d.currentStatus === 'Picked Up') && 
+            // 2. MUST belong to this exact rider
+            (d.assignedRider === process.env.REACT_APP_RIDER_ID || d.assignedRider?._id === process.env.REACT_APP_RIDER_ID)
+          )
           .map((d) => (
             <li key={d._id}>
               {d.customerName} — {d.currentStatus}
