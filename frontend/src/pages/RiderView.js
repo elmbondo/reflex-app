@@ -21,10 +21,11 @@ function RiderView() {
     return () => socket.off('delivery-updated');
   }, []);
 
-  const handleStatusUpdate = async (deliveryId, status) => {
+  const handleStatusUpdate = async (deliveryId, status, qrCode) => {
     await updateStatus(deliveryId, {
       status,
-      changedBy: process.env.REACT_APP_RIDER_ID
+      changedBy: process.env.REACT_APP_RIDER_ID,
+      ...(qrCode ? { qrCode } : {})
     });
   };
 
@@ -40,6 +41,12 @@ function RiderView() {
   );
   const pickedUpDeliveries = myDeliveries.filter(
     (d) => d.currentStatus === 'Picked Up'
+  );
+  const deliveredDeliveries = deliveries.filter(
+    (d) =>
+      d.currentStatus === 'Delivered' &&
+      (d.assignedRider === process.env.REACT_APP_RIDER_ID ||
+        d.assignedRider?._id === process.env.REACT_APP_RIDER_ID)
   );
 
   const cardStyle = {
@@ -106,12 +113,29 @@ function RiderView() {
             <strong>{d.customerName}</strong>
             <div style={{ color: '#777', fontSize: '14px' }}>{d.address}</div>
             <button
-              onClick={() => handleStatusUpdate(d._id, 'Delivered')}
+              onClick={() => handleStatusUpdate(d._id, 'Delivered', d.qrCodeValue)}
               style={{ ...buttonStyle, backgroundColor: '#4CAF50' }}
               // TODO: replace this button with an actual QR scan step
             >
               Scan & Confirm Delivered
             </button>
+          </div>
+        ))
+      )}
+
+      <div style={sectionTitleStyle}>
+        ✅ Delivered ({deliveredDeliveries.length})
+      </div>
+      {deliveredDeliveries.length === 0 ? (
+        <p style={{ color: '#aaa' }}>Nothing delivered yet.</p>
+      ) : (
+        deliveredDeliveries.map((d) => (
+          <div key={d._id} style={{ ...cardStyle, opacity: 0.7 }}>
+            <strong>{d.customerName}</strong>
+            <div style={{ color: '#777', fontSize: '14px' }}>{d.address}</div>
+            <div style={{ color: '#4CAF50', fontSize: '13px', marginTop: '4px' }}>
+              ✔ Delivered
+            </div>
           </div>
         ))
       )}
