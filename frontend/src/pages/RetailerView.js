@@ -22,6 +22,7 @@ function RetailerView() {
   const [apiError, setApiError] = useState(null);
   const [deliveries, setDeliveries] = useState([]);
   const [isLoadingDeliveries, setIsLoadingDeliveries] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('all');
 
   // Fetch past delivery requests
   const fetchDeliveries = useCallback(async () => {
@@ -189,6 +190,12 @@ function RetailerView() {
   const pendingCount = deliveries.filter((d) => d.currentStatus === 'Pending').length;
   const inProgressCount = deliveries.filter((d) => d.currentStatus === 'Assigned' || d.currentStatus === 'Picked Up').length;
   const completedCount = deliveries.filter((d) => d.currentStatus === 'Delivered').length;
+  const visibleDeliveries = deliveries.filter((d) => {
+    if (activeFilter === 'all') return true;
+    if (activeFilter === 'pending') return d.currentStatus === 'Pending';
+    if (activeFilter === 'delivered') return d.currentStatus === 'Delivered';
+    return true;
+  });
 
   return (
     <main className="retailer-container" aria-label="Retailer Delivery Management">
@@ -536,22 +543,34 @@ function RetailerView() {
 
           {/* Quick Metrics */}
           <div className="retailer-stats">
-            <div className="stat-box">
+            <div
+              className="stat-box"
+              onClick={() => setActiveFilter('all')}
+              style={{ cursor: 'pointer', border: activeFilter === 'all' ? '2px solid var(--color-olive)' : undefined }}
+            >
               <div className="stat-number">{deliveries.length}</div>
               <div className="stat-label">Total</div>
             </div>
-            <div className="stat-box">
+            <div
+              className="stat-box"
+              onClick={() => setActiveFilter('pending')}
+              style={{ cursor: 'pointer', border: activeFilter === 'pending' ? '2px solid var(--color-amber-dark)' : undefined }}
+            >
               <div className="stat-number" style={{ color: 'var(--color-amber-dark)' }}>{pendingCount}</div>
               <div className="stat-label">Pending</div>
             </div>
-            <div className="stat-box">
+            <div
+              className="stat-box"
+              onClick={() => setActiveFilter('delivered')}
+              style={{ cursor: 'pointer', border: activeFilter === 'delivered' ? '2px solid var(--color-success)' : undefined }}
+            >
               <div className="stat-number" style={{ color: 'var(--color-success)' }}>{completedCount}</div>
               <div className="stat-label">Delivered</div>
             </div>
           </div>
 
           {/* Deliveries list */}
-          {deliveries.length === 0 ? (
+          {visibleDeliveries.length === 0 ? (
             <div className="empty-state">
               <svg className="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
@@ -564,7 +583,7 @@ function RetailerView() {
             </div>
           ) : (
             <ul className="requests-list" aria-label="Deliveries list">
-              {deliveries.map((d) => (
+              {visibleDeliveries.map((d) => (
                 <li key={d._id || `${d.customerName}-${d.createdAt || Math.random()}`} className="request-item">
                   <div className="request-top">
                     <div className="customer-name">
