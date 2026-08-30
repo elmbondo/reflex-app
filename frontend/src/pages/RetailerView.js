@@ -6,8 +6,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { createDelivery, getDeliveries } from '../api';
 import './RetailerView.css';
 
-// Pre-agreed temporary retailer ID placeholder
-const TEMPORARY_RETAILER_ID = 'RETAILER_ID_HERE';
 
 function RetailerView() {
   const [form, setForm] = useState({
@@ -132,7 +130,7 @@ function RetailerView() {
         customerPhone: form.customerPhone.trim(),
         address: form.address.trim(),
         itemDescription: form.itemDescription.trim(),
-        retailer: TEMPORARY_RETAILER_ID
+        retailer: process.env.REACT_APP_RETAILER_ID
       };
 
       const response = await createDelivery(payload);
@@ -622,3 +620,4 @@ function RetailerView() {
 }
 
 export default RetailerView;
+
