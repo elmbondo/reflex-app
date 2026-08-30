@@ -1,0 +1,7 @@
+{
+  "name": "Reflex",
+  "description": "Trusted, fast, and reliable real-time delivery management with live rider dispatch and optical scanning.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
