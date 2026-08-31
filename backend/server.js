@@ -12,11 +12,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// --- Database connection ---
-// Person 2 sets the real connection string in a .env file (never commit that file)
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/reflex')
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+let isConnected = false;
+const connectDB = async () => {
+  if (isConnected || mongoose.connection.readyState >= 1) {
+    return;
+  }
+  try {
+    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/reflex');
+    isConnected = true;
+    console.log('MongoDB connected');
+  } catch (err) {
+    console.error('MongoDB connection error:', err);
+  }
+};
+
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
 
 // --- Basic health check route (confirms server is running) ---
 app.get('/', (req, res) => {
