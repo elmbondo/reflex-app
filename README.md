@@ -4,11 +4,23 @@ Reflex is a delivery tracking and coordination platform built for small Kenyan r
 
 ---
 
-## 🚀 Live Production Deployment
+## 🌐 Live Fullstack Production Deployment (Vercel)
 
-- **Production App (Vercel):** [https://reflex-app-hazel.vercel.app](https://reflex-app-hazel.vercel.app)
-- **Database:** MongoDB Atlas (`reflex-cluster`)
-- **Backend API Base:** `https://reflex-app-hazel.vercel.app/api`
+Both the **Frontend (React SPA)** and **Backend (Express API Serverless Functions)** are hosted live on Vercel:
+
+- **App Production URL:** [https://reflex-app-hazel.vercel.app](https://reflex-app-hazel.vercel.app)
+- **Live Backend API Base:** `https://reflex-app-hazel.vercel.app/api`
+- **Backend Health Check:** [https://reflex-app-hazel.vercel.app/api/deliveries](https://reflex-app-hazel.vercel.app/api/deliveries)
+- **Database Connection:** MongoDB Atlas Cloud (`reflex-cluster.srcq3y7.mongodb.net`)
+
+---
+
+## ⚡ Architecture Overview
+
+This project is deployed as a **fullstack monorepo** on Vercel:
+1. **Frontend (React SPA):** Renders the user interface and routes `/retailer`, `/dispatcher`, and `/rider` pages using React Router with SPA rewrites (`frontend/vercel.json`).
+2. **Backend Serverless API (`@vercel/node`):** Express routing (`backend/server.js`) served under `/api/*` endpoints. Database connections are managed via serverless Mongoose connection pooling.
+3. **Environment Configuration:** Live production secrets (`MONGO_URI`, `REACT_APP_RETAILER_ID`, `REACT_APP_DISPATCHER_ID`, `REACT_APP_RIDER_ID`) are securely stored in Vercel.
 
 ---
 
@@ -22,8 +34,8 @@ reflex-app/
 │   │   └── User.js           → User schema (Retailer, Dispatcher, Rider)
 │   ├── routes/
 │   │   └── deliveries.js     → Delivery creation, assignment, status update & QR verification endpoints
-│   ├── server.js             → Express backend, Socket.io real-time engine & Mongo connection
-│   └── vercel.json           → Vercel serverless function configuration
+│   ├── server.js             → Express backend with serverless database middleware
+│   └── vercel.json           → Backend Vercel serverless function configuration
 ├── frontend/
 │   ├── public/               → Favicon, PWA manifest, SEO meta tags
 │   ├── src/
@@ -42,6 +54,14 @@ reflex-app/
 
 ---
 
+## 👥 Persona Portals
+
+- **`/retailer`**: Retailer portal to submit package delivery requests and view live status tracking.
+- **`/dispatcher`**: Dispatcher management screen for assigning pending orders to active riders.
+- **`/rider`**: Rider mobile workflow with delivery action buttons and live camera QR code scanner.
+
+---
+
 ## 🛠️ How to Run Locally
 
 ### 1. Backend Setup
@@ -50,12 +70,12 @@ cd backend
 npm install
 cp .env.example .env
 ```
-Ensure your `backend/.env` file has a valid `MONGO_URI` connection string (either local MongoDB or MongoDB Atlas):
+Add your MongoDB connection string in `backend/.env`:
 ```env
 PORT=5000
 MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/reflex?retryWrites=true&w=majority
 ```
-Start the backend development server:
+Run backend server:
 ```bash
 npm run dev
 ```
@@ -67,25 +87,4 @@ cd frontend
 npm install
 npm start
 ```
-*Frontend app runs at `http://localhost:3000`.*
-
----
-
-## 🌐 Deploying to Vercel
-
-The application is fully configured for zero-config deployment on Vercel:
-
-1. Connect the repository to Vercel.
-2. Add the environment variable in Vercel settings:
-   - `MONGO_URI`: MongoDB Atlas connection URL
-3. Deploy!
-
-For step-by-step instructions, see [VERCEL_DEPLOYMENT.md](file:///home/sinux/Projects/PLP/reflex-app/VERCEL_DEPLOYMENT.md).
-
----
-
-## 👥 Persona Portals
-
-- **`/retailer`**: Retailer dashboard for creating requests & tracking live progress.
-- **`/dispatcher`**: Dispatcher management screen for assigning pending deliveries to active riders.
-- **`/rider`**: Rider interface with delivery status action buttons and camera QR verification scanner.
+*Frontend runs at `http://localhost:3000`.*
