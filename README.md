@@ -1,66 +1,91 @@
 # Reflex — Delivery Tracking App
 
-## What's already set up for you
+Reflex is a delivery tracking and coordination platform built for small Kenyan retailers to manage parcel dispatches, track rider status updates in real-time, and verify completed deliveries via QR code scanning.
 
-This is a starting skeleton, not a finished app — the folders and basic wiring exist so nobody starts from zero, but every "TODO" comment is real work still to be done.
+---
+
+## 🚀 Live Production Deployment
+
+- **Production App (Vercel):** [https://reflex-app-hazel.vercel.app](https://reflex-app-hazel.vercel.app)
+- **Database:** MongoDB Atlas (`reflex-cluster`)
+- **Backend API Base:** `https://reflex-app-hazel.vercel.app/api`
+
+---
+
+## 📁 Repository Structure
 
 ```
 reflex-app/
-  backend/
-    server.js          → main entry point, already connects Express + MongoDB + Socket.io
-    models/
-      Delivery.js       → Person 2's data model (already written)
-      User.js           → Person 2's data model (already written)
-    routes/
-      deliveries.js     → Person 3 builds out the API logic here
-    .env.example        → copy this to .env and fill in your own values (never commit .env)
-  frontend/
-    src/
-      api.js            → shared helper so every screen talks to the backend the same way
-      socket.js         → shared real-time connection, Person 5 builds on this
-      pages/
-        RetailerView.js   → Person 1's screen
-        DispatcherView.js → Person 4's screen
-        RiderView.js       → Person 5's screen
-      App.js             → connects all three screens together
+├── backend/
+│   ├── models/
+│   │   ├── Delivery.js       → Mongoose delivery schema & status history
+│   │   └── User.js           → User schema (Retailer, Dispatcher, Rider)
+│   ├── routes/
+│   │   └── deliveries.js     → Delivery creation, assignment, status update & QR verification endpoints
+│   ├── server.js             → Express backend, Socket.io real-time engine & Mongo connection
+│   └── vercel.json           → Vercel serverless function configuration
+├── frontend/
+│   ├── public/               → Favicon, PWA manifest, SEO meta tags
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── RetailerView.js   → Delivery request creation & status tracking
+│   │   │   ├── DispatcherView.js → Dispatcher rider assignment dashboard
+│   │   │   └── RiderView.js      → Rider status updater & camera QR scanner
+│   │   ├── api.js            → Shared Axios API helper
+│   │   ├── socket.js         → Shared Socket.io client instance
+│   │   ├── App.js            → React Router navigation & persona switcher
+│   │   └── index.css         → Styling, animations & mobile-first UI layout
+│   └── vercel.json           → Single Page Application (SPA) Vercel rewrite configuration
+├── vercel.json               → Monorepo root fullstack Vercel deployment configuration
+└── VERCEL_DEPLOYMENT.md      → Detailed guide for Vercel deployment options
 ```
 
-## How to get it running on your laptop
+---
 
-**Backend:**
+## 🛠️ How to Run Locally
+
+### 1. Backend Setup
 ```bash
 cd backend
 npm install
 cp .env.example .env
+```
+Ensure your `backend/.env` file has a valid `MONGO_URI` connection string (either local MongoDB or MongoDB Atlas):
+```env
+PORT=5000
+MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/reflex?retryWrites=true&w=majority
+```
+Start the backend development server:
+```bash
 npm run dev
 ```
-This starts the server at `http://localhost:5000`. You'll need MongoDB running locally, or use a free MongoDB Atlas cluster and paste that connection string into your `.env`.
+*Backend runs at `http://localhost:5000`.*
 
-**Frontend (separate terminal):**
+### 2. Frontend Setup (Separate Terminal)
 ```bash
 cd frontend
 npm install
 npm start
 ```
-This opens the app at `http://localhost:3000`.
+*Frontend app runs at `http://localhost:3000`.*
 
-## Before you start coding
+---
 
-1. Make sure you can run both backend and frontend locally first — if it doesn't start, fix that before writing new code
-2. Create your own branch: `git checkout -b your-branch-name`
-3. Work inside your assigned file(s) — check the folder map above for where your role's code lives
-4. Push often, open a pull request when a piece works, so it can get merged in
+## 🌐 Deploying to Vercel
 
-## Where each person works
+The application is fully configured for zero-config deployment on Vercel:
 
-| Person | File(s) |
-|---|---|
-| Person 1 | `frontend/src/pages/RetailerView.js` |
-| Person 2 | `backend/models/Delivery.js`, `backend/models/User.js` (already drafted — refine as needed) + merging everyone's PRs |
-| Person 3 | `backend/routes/deliveries.js` |
-| Person 4 | `frontend/src/pages/DispatcherView.js` |
-| Person 5 | `frontend/src/pages/RiderView.js` + `frontend/src/socket.js` (real-time wiring) |
+1. Connect the repository to Vercel.
+2. Add the environment variable in Vercel settings:
+   - `MONGO_URI`: MongoDB Atlas connection URL
+3. Deploy!
 
-## A note on the "TODO" comments
+For step-by-step instructions, see [VERCEL_DEPLOYMENT.md](file:///home/sinux/Projects/PLP/reflex-app/VERCEL_DEPLOYMENT.md).
 
-Every TODO in the code is a real gap — placeholder IDs, missing QR scan logic, no login system yet. These are honest, expected gaps for a one-week sprint, and several of them are good material for your trade-off log (e.g. "we hardcoded user IDs instead of building login, because auth wasn't the focus this week").
+---
+
+## 👥 Persona Portals
+
+- **`/retailer`**: Retailer dashboard for creating requests & tracking live progress.
+- **`/dispatcher`**: Dispatcher management screen for assigning pending deliveries to active riders.
+- **`/rider`**: Rider interface with delivery status action buttons and camera QR verification scanner.
