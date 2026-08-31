@@ -22,11 +22,30 @@ function RiderView() {
   }, []);
 
   const handleStatusUpdate = async (deliveryId, status, qrCode) => {
-    await updateStatus(deliveryId, {
-      status,
-      changedBy: process.env.REACT_APP_RIDER_ID,
-      ...(qrCode ? { qrCode } : {})
-    });
+    try {
+      // Optimistic state update so UI responds instantly
+      setDeliveries((prev) =>
+        prev.map((d) =>
+          d._id === deliveryId ? { ...d, currentStatus: status } : d
+        )
+      );
+
+      const res = await updateStatus(deliveryId, {
+        status,
+        changedBy: process.env.REACT_APP_RIDER_ID,
+        ...(qrCode ? { qrCode } : {})
+      });
+
+      if (res?.data) {
+        setDeliveries((prev) =>
+          prev.map((d) => (d._id === res.data._id ? res.data : d))
+        );
+      }
+    } catch (error) {
+      console.error('Failed to update status:', error);
+      // Revert/refresh on error
+      getDeliveries().then((res) => setDeliveries(res.data));
+    }
   };
 
   const myDeliveries = deliveries.filter(
