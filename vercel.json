@@ -17,7 +17,20 @@
       "dest": "backend/server.js"
     },
     {
-      "handle": "filesystem"
+      "src": "/static/(.*)",
+      "dest": "frontend/static/$1"
+    },
+    {
+      "src": "/favicon(.*)",
+      "dest": "frontend/favicon$1"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "frontend/manifest.json"
+    },
+    {
+      "src": "/icon(.*)",
+      "dest": "frontend/icon$1"
     },
     {
       "src": "/(.*)",
