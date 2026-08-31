@@ -41,6 +41,8 @@ function RetailerView() {
 
   useEffect(() => {
     fetchDeliveries();
+    const intervalId = setInterval(fetchDeliveries, 5000);
+    return () => clearInterval(intervalId);
   }, [fetchDeliveries]);
 
   // Validation logic

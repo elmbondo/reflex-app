@@ -10,7 +10,14 @@ function RiderView() {
   const [deliveries, setDeliveries] = useState([]);
 
   useEffect(() => {
-    getDeliveries().then((res) => setDeliveries(res.data));
+    const fetchDeliveries = () => {
+      getDeliveries().then((res) => setDeliveries(res.data)).catch(console.error);
+    };
+
+    fetchDeliveries(); // Initial fetch
+    
+    // Fallback polling for Vercel serverless (where WebSockets won't broadcast cross-client)
+    const intervalId = setInterval(fetchDeliveries, 5000);
 
     socket.on('delivery-updated', (updated) => {
       setDeliveries((prev) =>
@@ -18,7 +25,10 @@ function RiderView() {
       );
     });
 
-    return () => socket.off('delivery-updated');
+    return () => {
+      socket.off('delivery-updated');
+      clearInterval(intervalId);
+    };
   }, []);
 
   const handleStatusUpdate = async (deliveryId, status, qrCode) => {

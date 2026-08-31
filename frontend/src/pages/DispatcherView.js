@@ -31,6 +31,8 @@ function DispatcherView() {
 
   useEffect(() => {
     loadData();
+    const intervalId = setInterval(loadData, 5000);
+    return () => clearInterval(intervalId);
   }, []);
 
   // VIEW 2: The Assignment Screen
