@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, NavLink, Navigate } from 'react-router-dom';
 import RetailerView from './pages/RetailerView';
 import DispatcherView from './pages/DispatcherView';
 import RiderView from './pages/RiderView';
@@ -40,6 +40,7 @@ function App() {
         <Route path="/retailer" element={<RetailerView />} />
         <Route path="/dispatcher" element={<DispatcherView />} />
         <Route path="/rider" element={<RiderView />} />
+        <Route path="*" element={<Navigate to="/retailer" replace />} />
       </Routes>
     </BrowserRouter>
   );
