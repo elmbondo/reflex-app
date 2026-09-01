@@ -40,3 +40,7 @@ export const getRiders = async () => {
   const response = await api.get('/riders');
   return response.data;
 };
+
+// Support endpoint (public)
+export const submitSupportTicket = (ticketData) => api.post('/support', ticketData);
+

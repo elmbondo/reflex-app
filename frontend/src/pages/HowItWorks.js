@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './HowItWorks.css';
 
@@ -75,6 +75,17 @@ function StepIcon({ type }) {
 
 function HowItWorks() {
   const [active, setActive] = useState(null);
+
+  useEffect(() => {
+    document.title = 'How It Works | Reflex Delivery Coordination Platform';
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        'content',
+        'Discover how Reflex connects retail merchants, dispatchers, and riders into a smooth, transparent 4-step delivery pipeline across Nairobi.'
+      );
+    }
+  }, []);
 
   return (
     <div className="hiw-page">

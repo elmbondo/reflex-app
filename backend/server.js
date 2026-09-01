@@ -54,6 +54,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/deliveries', require('./routes/deliveries'));
+app.use('/api/support', require('./routes/support'));
 
 const User = require('./models/User');
 

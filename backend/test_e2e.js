@@ -237,6 +237,15 @@ const runTests = async () => {
     const statsRes = await adminAxios.get('/admin/stats');
     record('Admin Statistics Live Query', statsRes.status === 200 && statsRes.data.approvedCount >= 3, `Total approved: ${statsRes.data.approvedCount}`);
 
+    // 21. Support Ticket Submission (Public)
+    const supportRes = await axios.post(`${API_BASE}/support`, {
+      name: 'Otieno Odhiambo',
+      phone: '0722000111',
+      deliveryId: deliveryId,
+      issue: 'Customer requested an updated delivery ETA for parcel.'
+    });
+    record('Submit Support Ticket (Public)', supportRes.status === 201 && Boolean(supportRes.data.ticketId), `Ticket ID: ${supportRes.data.ticketId}`);
+
     console.log('\n=== ALL VERIFICATION TESTS COMPLETED ===');
     const allPassed = results.every(r => r.passed);
     console.log(`\nTOTAL TESTS: ${results.length} | PASSED: ${results.filter(r => r.passed).length} | FAILED: ${results.filter(r => !r.passed).length}`);

@@ -43,6 +43,9 @@ function Navigation() {
           <NavLink to="/faqs" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close}>
             FAQs
           </NavLink>
+          <NavLink to="/support" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close}>
+            Support
+          </NavLink>
         </nav>
 
         {/* Nav Actions */}
@@ -123,6 +126,9 @@ function Navigation() {
           </NavLink>
           <NavLink to="/faqs" className="mobile-nav-item" onClick={close}>
             FAQs
+          </NavLink>
+          <NavLink to="/support" className="mobile-nav-item" onClick={close}>
+            Support
           </NavLink>
 
           <div className="mobile-nav-divider" />

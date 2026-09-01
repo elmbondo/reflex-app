@@ -3,6 +3,7 @@
 // and confirm final delivery via QR scan
 
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getDeliveries, updateStatus } from '../api';
 import { socket } from '../socket';
 import { useAuth } from '../context/AuthContext';
@@ -60,11 +61,21 @@ function RiderView() {
     }
   };
 
+  const currentRiderId = user?.id || user?._id || process.env.REACT_APP_RIDER_ID;
+
+  const isAssignedToMe = (d) => {
+    if (!currentRiderId) return true;
+    return (
+      d.assignedRider === currentRiderId ||
+      d.assignedRider?._id === currentRiderId ||
+      d.assignedRider?.id === currentRiderId
+    );
+  };
+
   const myDeliveries = deliveries.filter(
     (d) =>
       (d.currentStatus === 'Assigned' || d.currentStatus === 'Picked Up') &&
-      (d.assignedRider === process.env.REACT_APP_RIDER_ID ||
-        d.assignedRider?._id === process.env.REACT_APP_RIDER_ID)
+      isAssignedToMe(d)
   );
 
   const assignedDeliveries = myDeliveries.filter(
@@ -76,8 +87,7 @@ function RiderView() {
   const deliveredDeliveries = deliveries.filter(
     (d) =>
       d.currentStatus === 'Delivered' &&
-      (d.assignedRider === process.env.REACT_APP_RIDER_ID ||
-        d.assignedRider?._id === process.env.REACT_APP_RIDER_ID)
+      isAssignedToMe(d)
   );
 
   const cardStyle = {
@@ -109,9 +119,15 @@ function RiderView() {
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '500px' }}>
+    <div style={{ padding: '24px 20px', fontFamily: 'Plus Jakarta Sans, sans-serif', maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ marginBottom: '16px' }}>
+        <Link to="/" style={{ textDecoration: 'none', color: '#c85a32', fontWeight: 600, fontSize: '0.9rem', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          ← Back to Home
+        </Link>
+      </div>
+
       <h1 style={{ marginBottom: '5px' }}>My Deliveries</h1>
-      <p style={{ color: '#888', marginTop: 0 }}>Reflex Rider</p>
+      <p style={{ color: '#888', marginTop: 0 }}>Reflex Rider Portal</p>
 
       <div style={sectionTitleStyle}>
         📦 Awaiting Pickup ({assignedDeliveries.length})

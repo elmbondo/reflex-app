@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './HomePage.css';
 
 function HomePage() {
+  useEffect(() => {
+    document.title = 'Reflex | Delivery Tracking & Coordination Platform for Kenyan Retailers';
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        'content',
+        'Reflex is a delivery tracking and coordination platform for small Kenyan retailers. Log customer orders, dispatch verified riders, and track parcels across Nairobi in real time.'
+      );
+    }
+  }, []);
   return (
     <div className="homepage-container">
       {/* Hero Section — Photographic backdrop with subtle overlay */}

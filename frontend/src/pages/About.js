@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './About.css';
 
 function About() {
+  useEffect(() => {
+    document.title = 'About Reflex | Delivery Tracking for Kenyan Retailers';
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        'content',
+        'Learn how Reflex is transforming retail logistics in Kenya with lightweight dispatching, rider coordination, and real-time tracking for shopkeepers.'
+      );
+    }
+  }, []);
   return (
     <div className="about-page">
       <section className="about-hero">

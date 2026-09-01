@@ -1,43 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './FAQs.css';
 
 const faqs = [
   {
     q: 'How fast are deliveries?',
-    a: 'Most deliveries within Nairobi are completed within 2–4 hours depending on traffic and rider availability. Express slots are being developed for high-priority parcels.',
+    a: 'Most deliveries within Nairobi are completed within 2–4 hours depending on traffic and rider availability. Orders are dispatched immediately once a retailer logs a request and a dispatcher assigns an active rider.',
   },
   {
     q: 'How can I track my package?',
-    a: 'Retailers have real-time visibility on every delivery through the Retailer portal. Status updates from "Pending" through "Assigned", "Picked Up", and "Delivered" appear as they happen.',
+    a: 'Retailers have real-time visibility on every delivery through their authenticated Retailer portal. Status updates from "Pending" through "Assigned", "Picked Up", and "Delivered" appear dynamically as riders update progress.',
+  },
+  {
+    q: 'How do I register as a Retailer, Rider, or Dispatcher?',
+    a: 'Click "Register" or "Sign Up" on the navigation bar, choose your role (Retailer, Delivery Rider, or Dispatcher), fill out your profile and vehicle/shop details, and submit. An administrator will review and approve your application before granting portal access.',
   },
   {
     q: 'What areas do you cover?',
-    a: 'Reflex currently operates across Nairobi with plans to expand to Mombasa and Kisumu. Coverage continues to grow as more riders join the network.',
+    a: 'Reflex currently operates across Nairobi metropolitan areas including CBD, Westlands, Kilimani, Eastlands, Upperhill, Karen, and surrounding commercial hubs.',
   },
   {
     q: 'What if a delivery fails or the rider is unreachable?',
-    a: 'Dispatchers monitor the queue and can re-assign deliveries if a rider becomes unavailable. The retailer is kept informed via status updates throughout.',
+    a: 'Dispatchers actively monitor the queue and can re-assign deliveries if a rider encounters a mechanical breakdown or delay. Retailers can also submit an issue via our in-app Support form.',
   },
   {
-    q: 'Do I need to install an app?',
-    a: 'No installation is required. Reflex runs fully in your mobile or desktop browser. An installable PWA option is also available for a more native feel.',
+    q: 'Do I need to install a mobile app?',
+    a: 'No installation from an app store is required. Reflex runs responsively in any mobile or desktop web browser. An installable Progressive Web App (PWA) option is also supported.',
   },
   {
-    q: 'How is the retailer ID assigned?',
-    a: 'In the current MVP, a temporary retailer ID is used to identify merchants. Full multi-tenant authentication with unique login credentials is on the roadmap.',
+    q: 'Is my account and delivery data secure?',
+    a: 'All data is stored in a secure MongoDB Atlas cluster with JWT authentication and role-based access control. Unapproved or unauthorized users cannot access operational portals.',
   },
   {
-    q: 'Is my data secure?',
-    a: 'All data is stored in a dedicated MongoDB Atlas cluster with network isolation. Sensitive environment variables (like database credentials) are never exposed in the frontend code.',
-  },
-  {
-    q: 'Who do I contact for support?',
-    a: 'Reach out to your assigned Dispatcher or our operations team directly through the platform. An in-app support system is coming soon.',
+    q: 'Who do I contact for support or inquiries?',
+    a: 'You can submit a ticket directly through our Support Form or reach our dispatch operations team directly through the platform.',
   },
 ];
 
 function FAQs() {
   const [open, setOpen] = useState(null);
+
+  useEffect(() => {
+    document.title = 'Frequently Asked Questions | Reflex Delivery Platform';
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        'content',
+        'Find answers to common questions about Reflex delivery tracking, retailer order dispatch, rider assignment, and role registration in Nairobi.'
+      );
+    }
+  }, []);
 
   const toggle = (i) => setOpen(open === i ? null : i);
 
@@ -51,7 +63,7 @@ function FAQs() {
           </div>
           <h1 className="faqs-headline">Questions? We have answers.</h1>
           <p className="faqs-lead">
-            Everything you need to know about how Reflex works, what to expect,
+            Everything you need to know about how Reflex works, role registration, delivery tracking,
             and how to get the most out of the platform.
           </p>
         </div>
@@ -72,6 +84,13 @@ function FAQs() {
               {open === i && (
                 <div className="faq-answer">
                   {faq.a}
+                  {i === faqs.length - 1 && (
+                    <p style={{ marginTop: '10px' }}>
+                      <Link to="/support" style={{ color: '#c85a32', fontWeight: '700' }}>
+                        Go to Support Form →
+                      </Link>
+                    </p>
+                  )}
                 </div>
               )}
             </div>
@@ -83,3 +102,4 @@ function FAQs() {
 }
 
 export default FAQs;
+

@@ -14,6 +14,7 @@ import AdminView from './pages/AdminView';
 import About from './pages/About';
 import HowItWorks from './pages/HowItWorks';
 import FAQs from './pages/FAQs';
+import SupportView from './pages/SupportView';
 
 // Helper: protect portal routes by role & approval status
 const ProtectedRoute = ({ children, allowedRole }) => {
@@ -58,10 +59,12 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/faqs" element={<FAQs />} />
+          <Route path="/support" element={<SupportView />} />
 
           {/* Authentication & Application routes */}
           <Route path="/login" element={<LoginView />} />
           <Route path="/register" element={<RegisterView />} />
+          <Route path="/signup" element={<RegisterView />} />
           <Route path="/pending" element={<PendingView />} />
 
           {/* Protected Role-Based Portals */}
