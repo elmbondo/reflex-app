@@ -2,6 +2,14 @@
 // Person 3 (Backend/API) builds routes here. Person 5 wires up real-time events.
 
 require('dotenv').config();
+const dns = require('dns');
+try {
+  // Use public DNS to ensure reliable MongoDB Atlas SRV query resolution on Windows
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch (e) {
+  console.warn('DNS server configuration warning:', e.message);
+}
+
 const express = require('express');
 const cors = require('cors');
 const http = require('http');

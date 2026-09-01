@@ -6,6 +6,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { createDelivery, getDeliveries } from '../api';
 import './RetailerView.css';
 
+// Pre-agreed temporary retailer ID placeholder
+const TEMPORARY_RETAILER_ID = '6a8f2824b13a4922f089478c';
 
 function RetailerView() {
   const [form, setForm] = useState({

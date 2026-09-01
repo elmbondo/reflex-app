@@ -1,8 +1,25 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, NavLink, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Navigation from './components/Navigation';
+
+import HomePage from './pages/HomePage';
 import RetailerView from './pages/RetailerView';
 import DispatcherView from './pages/DispatcherView';
 import RiderView from './pages/RiderView';
+import LoginView from './pages/LoginView';
+import AdminView from './pages/AdminView';
+import About from './pages/About';
+import HowItWorks from './pages/HowItWorks';
+import FAQs from './pages/FAQs';
+
+// Helper: protect portal routes by role
+const ProtectedRoute = ({ children, allowedRole }) => {
+  const { role } = useAuth();
+  if (!role) return <Navigate to="/login" replace />;
+  if (role !== allowedRole) return <Navigate to={`/${role.toLowerCase()}`} replace />;
+  return children;
+};
 
 const navLinkStyle = ({ isActive }) => ({
   padding: '10px 20px',
@@ -17,32 +34,33 @@ const navLinkStyle = ({ isActive }) => ({
 
 function App() {
   return (
-    <BrowserRouter>
-      <nav
-        style={{
-          padding: '15px 20px',
-          borderBottom: '1px solid #ddd',
-          backgroundColor: '#fafafa',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        {/* Temporary role switcher for demo purposes — replace with real login/role routing later */}
-        <span style={{ marginRight: '20px', fontWeight: 'bold', color: '#888' }}>
-          REFLEX
-        </span>
-        <NavLink to="/retailer" style={navLinkStyle}>Retailer</NavLink>
-        <NavLink to="/dispatcher" style={navLinkStyle}>Dispatcher</NavLink>
-        <NavLink to="/rider" style={navLinkStyle}>Rider</NavLink>
-      </nav>
+    <AuthProvider>
+      <BrowserRouter>
+        <Navigation />
+        <Routes>
+          {/* Public: Home + info pages */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/faqs" element={<FAQs />} />
+          <Route path="/login" element={<LoginView />} />
 
-      <Routes>
-        <Route path="/retailer" element={<RetailerView />} />
-        <Route path="/dispatcher" element={<DispatcherView />} />
-        <Route path="/rider" element={<RiderView />} />
-        <Route path="*" element={<Navigate to="/retailer" replace />} />
-      </Routes>
-    </BrowserRouter>
+          {/* Protected: role portals */}
+          <Route path="/admin" element={
+            <ProtectedRoute allowedRole="Admin"><AdminView /></ProtectedRoute>
+          } />
+          <Route path="/retailer" element={
+            <ProtectedRoute allowedRole="Retailer"><RetailerView /></ProtectedRoute>
+          } />
+          <Route path="/dispatcher" element={
+            <ProtectedRoute allowedRole="Dispatcher"><DispatcherView /></ProtectedRoute>
+          } />
+          <Route path="/rider" element={
+            <ProtectedRoute allowedRole="Rider"><RiderView /></ProtectedRoute>
+          } />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

@@ -1,5 +1,50 @@
-node_modules/
+# ─────────────────────────────────────────────
+# Environment files — NEVER commit real secrets
+# .env.example files ARE committed (safe templates only)
+# ─────────────────────────────────────────────
 .env
-.DS_Store
+.env.local
+.env.development
+.env.production
+.env.test
+backend/.env
+frontend/.env
+
+# ─────────────────────────────────────────────
+# Dependencies
+# ─────────────────────────────────────────────
+node_modules/
+**/node_modules/
+
+# ─────────────────────────────────────────────
+# Build outputs
+# ─────────────────────────────────────────────
 build/
 dist/
+frontend/build/
+frontend/dist/
+
+# ─────────────────────────────────────────────
+# OS & editor artifacts
+# ─────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ─────────────────────────────────────────────
+# IDE / editor folders
+# ─────────────────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ─────────────────────────────────────────────
+# Yarn (project uses npm)
+# ─────────────────────────────────────────────
+yarn.lock

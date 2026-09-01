@@ -1,24 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
 
 :root {
-  /* Primary Warm Earthy Palette */
+  /* Primary Solid Warm Orange / Terracotta Palette */
   --color-terracotta: #C85A32;
   --color-terracotta-hover: #B24E2A;
   --color-terracotta-active: #9A4122;
-  --color-terracotta-light: #FBEFEA;
+  --color-terracotta-light: #FBF0EA;
+  --color-terracotta-surface: #F6DFD5;
   
-  --color-amber: #D97706;
-  --color-amber-dark: #B45309;
-  --color-amber-light: #FEF3C7;
-  
-  --color-olive: #2D3A29;
-  --color-olive-light: #4A5D44;
-  --color-olive-surface: #EBF0E9;
-  
-  --color-sand: #EAE3D2;
-  --color-sand-light: #F6F3EC;
+  /* Supporting Brand Colors: Cream, Sand & Warm Charcoal */
   --color-cream: #FAF7F2;
+  --color-cream-card: #FFFFFF;
+  --color-sand: #EAE3D2;
+  --color-sand-light: #F5EFEB;
   --color-white: #FFFFFF;
+  
+  /* Dark / Text Colors */
+  --color-charcoal: #1C1917;
+  --color-charcoal-light: #292524;
+  --color-olive: #242D22;
+  --color-olive-light: #384535;
   
   --color-text-main: #1C1917;
   --color-text-muted: #57534E;
@@ -26,25 +27,30 @@
   --color-border: #E7DFD5;
   --color-border-focus: #C85A32;
   
-  --color-success: #2E7D32;
+  /* Status Colors */
+  --color-success: #1E6B24;
   --color-success-bg: #EDF7ED;
-  --color-error: #C62828;
-  --color-error-bg: #FDEDED;
+  --color-error: #B91C1C;
+  --color-error-bg: #FEF2F2;
+  --color-amber: #C26100;
+  --color-amber-bg: #FEF7ED;
   
   /* Typography */
-  --font-family-base: 'Fredoka', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-base: 'Plus Jakarta Sans', 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-heading: 'Plus Jakarta Sans', 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   
-  /* Shadows & Radius */
+  /* Shapes & Radius */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
-  --radius-xl: 20px;
+  --radius-xl: 24px;
   --radius-full: 9999px;
   
-  --shadow-sm: 0 1px 3px rgba(44, 30, 22, 0.06);
-  --shadow-md: 0 4px 12px rgba(44, 30, 22, 0.08);
-  --shadow-lg: 0 8px 24px rgba(44, 30, 22, 0.12);
-  --shadow-focus: 0 0 0 3px rgba(200, 90, 50, 0.25);
+  /* Solid Shadows */
+  --shadow-sm: 0 1px 3px rgba(28, 25, 23, 0.05);
+  --shadow-md: 0 4px 14px rgba(28, 25, 23, 0.08);
+  --shadow-lg: 0 10px 28px rgba(28, 25, 23, 0.12);
+  --shadow-focus: 0 0 0 3px rgba(200, 90, 50, 0.28);
 }
 
 *, *::before, *::after {
@@ -59,10 +65,17 @@ html, body {
   color: var(--color-text-main);
   font-family: var(--font-family-base);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-heading);
+  color: var(--color-charcoal);
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 /* Accessibility Focus States */
