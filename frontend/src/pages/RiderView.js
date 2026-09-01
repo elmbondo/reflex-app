@@ -5,8 +5,10 @@
 import React, { useState, useEffect } from 'react';
 import { getDeliveries, updateStatus } from '../api';
 import { socket } from '../socket';
+import { useAuth } from '../context/AuthContext';
 
 function RiderView() {
+  const { user } = useAuth();
   const [deliveries, setDeliveries] = useState([]);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ function RiderView() {
 
       const res = await updateStatus(deliveryId, {
         status,
-        changedBy: process.env.REACT_APP_RIDER_ID,
+        changedBy: user?.id || user?._id || process.env.REACT_APP_RIDER_ID || '6a8f2824b13a4922f089478e',
         ...(qrCode ? { qrCode } : {})
       });
 

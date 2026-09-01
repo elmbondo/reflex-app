@@ -140,6 +140,20 @@
   color: var(--color-terracotta);
 }
 
+.btn-nav-register-link {
+  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-charcoal);
+  padding: 6px 12px;
+  transition: color 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-nav-register-link:hover {
+  color: var(--color-terracotta);
+}
+
 .nav-role-pill {
   font-size: 0.75rem;
   font-weight: 700;
@@ -150,6 +164,19 @@
   border: 1px solid var(--color-terracotta-surface);
   padding: 3px 10px;
   border-radius: var(--radius-full);
+  text-decoration: none;
+}
+
+.nav-role-pill.status-pending {
+  background-color: #fef5e7;
+  color: #b7791f;
+  border-color: #fbd38d;
+}
+
+.nav-role-pill.status-rejected {
+  background-color: #fde8e8;
+  color: #c53030;
+  border-color: #feb2b2;
 }
 
 .btn-nav-logout {

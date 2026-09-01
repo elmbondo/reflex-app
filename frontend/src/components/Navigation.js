@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import './Navigation.css';
 
 function Navigation() {
-  const { role, logout } = useAuth();
+  const { role, status, logout, isAuthenticated, isPending, isRejected } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -44,18 +44,39 @@ function Navigation() {
 
         {/* Nav Actions */}
         <div className="nav-actions">
-          {role ? (
+          {isAuthenticated && role ? (
             <div className="nav-auth-group">
               <NavLink to={`/${role.toLowerCase()}`} className="btn-portal-link" onClick={close}>
-                My Portal
+                {role} Portal
               </NavLink>
               <span className="nav-role-pill">{role}</span>
               <button className="btn-nav-logout" onClick={handleLogout} aria-label="Log out">
                 Logout
               </button>
             </div>
+          ) : isPending ? (
+            <div className="nav-auth-group">
+              <NavLink to="/pending" className="nav-role-pill status-pending" onClick={close}>
+                Pending Review
+              </NavLink>
+              <button className="btn-nav-logout" onClick={handleLogout} aria-label="Log out">
+                Logout
+              </button>
+            </div>
+          ) : isRejected ? (
+            <div className="nav-auth-group">
+              <NavLink to="/pending" className="nav-role-pill status-rejected" onClick={close}>
+                Declined
+              </NavLink>
+              <button className="btn-nav-logout" onClick={handleLogout} aria-label="Log out">
+                Logout
+              </button>
+            </div>
           ) : (
             <div className="nav-guest-group">
+              <Link to="/register" className="btn-nav-register-link" onClick={close}>
+                Register
+              </Link>
               <Link to="/login" className="btn-nav-login-pill" onClick={close}>
                 Login
               </Link>
@@ -100,10 +121,19 @@ function Navigation() {
 
           <div className="mobile-nav-divider" />
 
-          {role ? (
+          {isAuthenticated && role ? (
             <div className="mobile-auth-actions">
               <NavLink to={`/${role.toLowerCase()}`} className="mobile-nav-item" onClick={close}>
-                My Portal ({role})
+                {role} Portal
+              </NavLink>
+              <button className="btn-nav-logout mobile-logout-btn" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
+          ) : isPending || isRejected ? (
+            <div className="mobile-auth-actions">
+              <NavLink to="/pending" className="mobile-nav-item" onClick={close}>
+                Application Status ({status})
               </NavLink>
               <button className="btn-nav-logout mobile-logout-btn" onClick={handleLogout}>
                 Logout
@@ -111,8 +141,11 @@ function Navigation() {
             </div>
           ) : (
             <div className="mobile-guest-actions">
+              <Link to="/register" className="mobile-nav-item" onClick={close}>
+                Register Role Application
+              </Link>
               <Link to="/login" className="btn-nav-login-pill mobile-login-btn" onClick={close}>
-                Login
+                Login to Portal
               </Link>
             </div>
           )}

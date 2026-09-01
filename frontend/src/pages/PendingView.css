@@ -1,0 +1,190 @@
+/* PendingView.css */
+
+.pending-page {
+  min-height: calc(100vh - 80px);
+  background-color: var(--color-bg, #fdfbf7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2.5rem 1.25rem;
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+}
+
+.pending-card {
+  max-width: 580px;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 16px;
+  border: 1px solid var(--color-sand, #eae3d9);
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(44, 38, 34, 0.05);
+}
+
+.pending-icon-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+}
+
+.pending-icon-badge.pending {
+  background-color: #fef5e7;
+  color: #b7791f;
+}
+
+.pending-icon-badge.rejected {
+  background-color: #fde8e8;
+  color: #c53030;
+}
+
+.status-badge-lg {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+}
+
+.badge-pending {
+  background-color: #fef5e7;
+  color: #b7791f;
+  border: 1px solid #fbd38d;
+}
+
+.badge-rejected {
+  background-color: #fde8e8;
+  color: #c53030;
+  border: 1px solid #feb2b2;
+}
+
+.pending-title {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--color-charcoal, #2c2622);
+  margin: 0.25rem 0 0.75rem;
+}
+
+.pending-desc {
+  color: #5c544d;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin-bottom: 1.5rem;
+}
+
+.status-notice-banner {
+  background-color: #e8f3ea;
+  color: var(--color-olive, #4a5d4e);
+  border: 1px solid #c6e2cb;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.applicant-details-card {
+  background-color: #faf7f2;
+  border: 1px solid var(--color-sand, #eae3d9);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.details-header {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-charcoal, #2c2622);
+  margin: 0 0 0.85rem;
+  border-bottom: 1px solid #eae3d9;
+  padding-bottom: 0.5rem;
+}
+
+.details-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  font-size: 0.88rem;
+  border-bottom: 1px solid #efe8df;
+}
+
+.details-row:last-child {
+  border-bottom: none;
+}
+
+.details-label {
+  color: #7a7067;
+  font-weight: 500;
+}
+
+.details-val {
+  color: var(--color-charcoal, #2c2622);
+  font-weight: 700;
+}
+
+.pending-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 480px) {
+  .pending-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.btn-refresh-status {
+  padding: 0.85rem 1.5rem;
+  background-color: var(--color-terracotta, #c85a32);
+  color: #ffffff;
+  border: none;
+  border-radius: 30px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-refresh-status:hover {
+  background-color: #b34e28;
+}
+
+.btn-logout {
+  padding: 0.85rem 1.5rem;
+  background-color: #faf7f2;
+  border: 1px solid var(--color-sand, #eae3d9);
+  color: #5c544d;
+  border-radius: 30px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-logout:hover {
+  background-color: #eee8e0;
+}
+
+.pending-footer {
+  font-size: 0.88rem;
+}
+
+.pending-footer a {
+  color: #8c827a;
+  text-decoration: none;
+}
+
+.pending-footer a:hover {
+  color: var(--color-charcoal, #2c2622);
+  text-decoration: underline;
+}

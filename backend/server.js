@@ -20,19 +20,25 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Database connection logic
 let isConnected = false;
 const connectDB = async () => {
   if (isConnected || mongoose.connection.readyState >= 1) {
     return;
   }
   try {
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/reflex');
+    await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 5000
+    });
     isConnected = true;
-    console.log('MongoDB connected');
+    console.log('MongoDB connected successfully to Atlas');
   } catch (err) {
     console.error('MongoDB connection error:', err);
   }
 };
+
+// Connect immediately on startup
+connectDB();
 
 app.use(async (req, res, next) => {
   await connectDB();
@@ -45,24 +51,31 @@ app.get('/', (req, res) => {
 });
 
 // --- Routes ---
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/admin', require('./routes/admin'));
 app.use('/api/deliveries', require('./routes/deliveries'));
 
 const User = require('./models/User');
 
 app.get('/api/riders', async (req, res) => {
   try {
-    const riders = await User.find({ role: 'rider' });
-    res.status(200).json(riders);
+    // Only return approved riders for assignment, with fallback to all riders
+    const approvedRiders = await User.find({ role: 'rider', status: 'approved' });
+    if (approvedRiders && approvedRiders.length > 0) {
+      return res.status(200).json(approvedRiders);
+    }
+    const allRiders = await User.find({ role: 'rider' });
+    res.status(200).json(allRiders);
   } catch (error) {
     console.error("Error fetching riders:", error);
     res.status(500).json({ message: "Server error fetching riders" });
   }
 });
 
-// --- Socket.io setup (Person 5 builds on this) ---
+// --- Socket.io setup ---
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: '*' } // fine for development; tighten before real deployment
+  cors: { origin: '*' }
 });
 
 io.on('connection', (socket) => {

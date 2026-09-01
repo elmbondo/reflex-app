@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getDeliveries, assignRider, getRiders } from '../api'; 
+import { useAuth } from '../context/AuthContext';
 
 function DispatcherView() {
+  const { user } = useAuth();
   const [deliveries, setDeliveries] = useState([]);
   const [selectedDelivery, setSelectedDelivery] = useState(null);
   
@@ -77,7 +79,7 @@ function DispatcherView() {
               try {
                 await assignRider(selectedDelivery._id, {
                   riderId: selectedRider,
-                  dispatcherId: process.env.REACT_APP_DISPATCHER_ID
+                  dispatcherId: user?.id || user?._id || process.env.REACT_APP_DISPATCHER_ID || '6a8f2824b13a4922f089478d'
                 });
 
                 setAssignMessage({ type: 'success', text: 'Rider assigned successfully!' });

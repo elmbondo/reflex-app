@@ -4,12 +4,14 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { createDelivery, getDeliveries } from '../api';
+import { useAuth } from '../context/AuthContext';
 import './RetailerView.css';
 
 // Pre-agreed temporary retailer ID placeholder
 const TEMPORARY_RETAILER_ID = '6a8f2824b13a4922f089478c';
 
 function RetailerView() {
+  const { user } = useAuth();
   const [form, setForm] = useState({
     customerName: '',
     customerPhone: '',
@@ -135,7 +137,7 @@ function RetailerView() {
         customerPhone: form.customerPhone.trim(),
         address: form.address.trim(),
         itemDescription: form.itemDescription.trim(),
-        retailer: process.env.REACT_APP_RETAILER_ID
+        retailer: user?.id || user?._id || process.env.REACT_APP_RETAILER_ID || TEMPORARY_RETAILER_ID
       };
 
       const response = await createDelivery(payload);
