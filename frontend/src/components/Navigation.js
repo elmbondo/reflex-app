@@ -29,8 +29,11 @@ function Navigation() {
           <span className="brand-logo-text">Reflex</span>
         </Link>
 
-        {/* Desktop Nav Links: About -> How It Works -> FAQs */}
+        {/* Desktop Nav Links */}
         <nav className="nav-center-links" aria-label="Primary Navigation">
+          <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close} end>
+            Home
+          </NavLink>
           <NavLink to="/about" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={close}>
             About
           </NavLink>
@@ -109,6 +112,9 @@ function Navigation() {
       {/* Mobile Drawer Navigation */}
       {isOpen && (
         <nav className="mobile-nav-drawer" aria-label="Mobile Navigation">
+          <NavLink to="/" className="mobile-nav-item" onClick={close} end>
+            Home
+          </NavLink>
           <NavLink to="/about" className="mobile-nav-item" onClick={close}>
             About
           </NavLink>

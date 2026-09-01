@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getDeliveries, assignRider, getRiders } from '../api'; 
 import { useAuth } from '../context/AuthContext';
 
@@ -40,11 +41,33 @@ function DispatcherView() {
   // VIEW 2: The Assignment Screen
   if (selectedDelivery) {
     return (
-      <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-        <h2>Assign Delivery</h2>
-        <p><strong>Delivery:</strong> {selectedDelivery._id}</p>
-        <p><strong>Customer:</strong> {selectedDelivery.customerName}</p>
-        <hr />
+      <div style={{ padding: '24px', maxWidth: '800px', margin: '0 auto', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+        <button
+          onClick={() => setSelectedDelivery(null)}
+          style={{
+            background: '#faf7f2',
+            border: '1px solid #eae3d9',
+            borderRadius: '20px',
+            padding: '6px 14px',
+            fontSize: '0.88rem',
+            fontWeight: 600,
+            color: '#5c544d',
+            cursor: 'pointer',
+            marginBottom: '16px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px'
+          }}
+        >
+          ← Back to Open Deliveries
+        </button>
+
+        <h2>Assign Rider to Delivery</h2>
+        <p><strong>Order ID:</strong> {selectedDelivery._id}</p>
+        <p><strong>Customer:</strong> {selectedDelivery.customerName} ({selectedDelivery.customerPhone})</p>
+        <p><strong>Destination:</strong> {selectedDelivery.address}</p>
+        <p><strong>Package:</strong> {selectedDelivery.itemDescription}</p>
+        <hr style={{ border: 'none', borderTop: '1px solid #eae3d9', margin: '16px 0' }} />
 
         {assignMessage && (
           <div style={{
@@ -113,7 +136,13 @@ function DispatcherView() {
   );
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
+    <div style={{ padding: '24px', maxWidth: '900px', margin: '0 auto', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+      <div style={{ marginBottom: '16px' }}>
+        <Link to="/" style={{ textDecoration: 'none', color: '#c85a32', fontWeight: 600, fontSize: '0.9rem', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          ← Back to Home
+        </Link>
+      </div>
+
       <h1>REFLEX DISPATCHER</h1>
       <h2>Open Deliveries</h2>
 
