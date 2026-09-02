@@ -145,7 +145,15 @@ function DispatcherView() {
   return (
     <div className="dispatcher-page">
       <div className="dispatcher-container">
-
+        <div style={{ marginBottom: '14px' }}>
+          <Link to="/" className="dispatcher-back-link" style={{ textDecoration: 'none', color: 'var(--color-terracotta, #c85a32)', fontWeight: 600, fontSize: '0.9rem', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back to Home</span>
+          </Link>
+        </div>
 
         {/* Portal Header */}
         <header className="dispatcher-header">
