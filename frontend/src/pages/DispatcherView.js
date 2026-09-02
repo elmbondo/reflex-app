@@ -145,12 +145,7 @@ function DispatcherView() {
   return (
     <div className="dispatcher-page">
       <div className="dispatcher-container">
-        {/* Navigation Breadcrumb */}
-        <div style={{ marginBottom: '14px' }}>
-          <Link to="/" className="dispatcher-back-link">
-            Back to Home
-          </Link>
-        </div>
+
 
         {/* Portal Header */}
         <header className="dispatcher-header">

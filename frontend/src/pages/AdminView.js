@@ -124,12 +124,7 @@ function AdminView() {
   return (
     <div className="admin-portal-page">
       <div className="admin-portal-container">
-        {/* Header */}
-        <div style={{ marginBottom: '14px' }}>
-          <Link to="/" style={{ textDecoration: 'none', color: 'var(--color-terracotta, #c85a32)', fontWeight: 600, fontSize: '0.9rem', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-            Back to Home
-          </Link>
-        </div>
+
 
         <header className="admin-header">
           <div className="admin-header-title-group">

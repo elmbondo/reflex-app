@@ -128,12 +128,7 @@ function RiderView() {
   return (
     <div className="rider-portal-page">
       <div className="rider-portal-container">
-        {/* Navigation Breadcrumb */}
-        <div style={{ marginBottom: '14px' }}>
-          <Link to="/" className="rider-back-link">
-            Back to Home
-          </Link>
-        </div>
+
 
         {/* Header */}
         <header className="rider-header">

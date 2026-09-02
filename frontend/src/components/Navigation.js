@@ -1,21 +1,73 @@
 import React, { useState } from 'react';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Navigation.css';
 
 function Navigation() {
-  const { role, status, logout, isAuthenticated, isPending, isRejected } = useAuth();
+  const { role, status, user, logout, isAuthenticated, isPending, isRejected } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const close = () => setIsOpen(false);
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate('/login');
     close();
   };
 
+  const operationalRoutes = ['/retailer', '/dispatcher', '/rider', '/admin', '/pending'];
+  const isOperationalPage = operationalRoutes.includes(location.pathname.toLowerCase());
+
+  // Operational portal navigation (when in an operational portal or logged in)
+  if (isOperationalPage && (isAuthenticated || isPending || isRejected)) {
+    const portalHome = role ? `/${role.toLowerCase()}` : (isPending || isRejected ? '/pending' : '/');
+
+    return (
+      <header className="main-nav portal-nav-header">
+        <div className="nav-container">
+          {/* Brand Logo -> Active Role Portal */}
+          <Link to={portalHome} className="brand-logo" aria-label="Reflex Portal">
+            <span className="brand-logo-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </span>
+            <span className="brand-logo-text">Reflex</span>
+          </Link>
+
+          {/* Operational Portal Identifier */}
+          <div className="portal-header-indicator">
+            <span className="portal-indicator-dot" aria-hidden="true"></span>
+            <span className="portal-indicator-text">
+              {role === 'Admin' && 'Central Administration Desk'}
+              {role === 'Retailer' && 'Retailer Order Desk'}
+              {role === 'Dispatcher' && 'Fleet Dispatcher Hub'}
+              {role === 'Rider' && 'Motorcycle Courier Portal'}
+              {(isPending || isRejected) && 'Application Review'}
+              {!role && !isPending && !isRejected && 'Operational Portal'}
+            </span>
+          </div>
+
+          {/* User Session & Logout */}
+          <div className="nav-actions">
+            <div className="nav-auth-group">
+              {user?.name && <span className="nav-user-name">{user.name}</span>}
+              {role && <span className="nav-role-pill">{role}</span>}
+              {isPending && <span className="nav-role-pill status-pending">Pending Review</span>}
+              {isRejected && <span className="nav-role-pill status-rejected">Declined</span>}
+              <button className="btn-nav-logout" onClick={handleLogout} aria-label="Log out of portal">
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+    );
+  }
+
+  // Public marketing website navigation
   return (
     <header className="main-nav">
       <div className="nav-container">
