@@ -123,6 +123,7 @@ function AdminView() {
 
   return (
     <div className="admin-portal-page">
+      <div className="admin-portal-container">
         <div style={{ marginBottom: '14px' }}>
           <Link to="/" style={{ textDecoration: 'none', color: 'var(--color-terracotta, #c85a32)', fontWeight: 600, fontSize: '0.9rem', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
