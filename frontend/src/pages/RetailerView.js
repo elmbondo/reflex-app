@@ -5,6 +5,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { createDelivery, getDeliveries } from '../api';
 import { useAuth } from '../context/AuthContext';
+import DeliveryQrModal from '../components/DeliveryQrModal';
 import './RetailerView.css';
 
 function RetailerView() {
@@ -24,6 +25,7 @@ function RetailerView() {
   const [deliveries, setDeliveries] = useState([]);
   const [isLoadingDeliveries, setIsLoadingDeliveries] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
+  const [qrModalDelivery, setQrModalDelivery] = useState(null);
 
   // Fetch past delivery requests
   const fetchDeliveries = useCallback(async () => {
@@ -307,18 +309,35 @@ function RetailerView() {
                 )}
               </div>
 
-              <button
-                type="button"
-                className="btn-new-delivery"
-                onClick={handleResetForNewDelivery}
-                id="log-another-delivery-btn"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                Log Another Delivery
-              </button>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  className="btn-new-delivery"
+                  onClick={() => setQrModalDelivery(submitSuccessData)}
+                  style={{ backgroundColor: 'var(--color-olive, #242d22)' }}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                  </svg>
+                  View QR Pass
+                </button>
+
+                <button
+                  type="button"
+                  className="btn-new-delivery"
+                  onClick={handleResetForNewDelivery}
+                  id="log-another-delivery-btn"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  Log Another Delivery
+                </button>
+              </div>
             </div>
           ) : (
             /* Creation Form */
@@ -627,9 +646,27 @@ function RetailerView() {
                     )}
                   </div>
 
-                  <div className="request-meta">
-                    <span>Ref: {d._id ? d._id.slice(-6).toUpperCase() : 'PENDING'}</span>
-                    <span>{d.createdAt ? new Date(d.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Just now'}</span>
+                  <div className="request-meta" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <span>Ref: {d._id ? d._id.slice(-6).toUpperCase() : 'PENDING'}</span>
+                      <span>{d.createdAt ? new Date(d.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Just now'}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setQrModalDelivery(d)}
+                      style={{
+                        background: 'none',
+                        border: '1px solid var(--color-border)',
+                        borderRadius: 'var(--radius-full)',
+                        padding: '3px 10px',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        color: 'var(--color-terracotta)',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      QR Pass
+                    </button>
                   </div>
                 </li>
               ))}
@@ -637,6 +674,13 @@ function RetailerView() {
           )}
         </section>
       </div>
+
+      {qrModalDelivery && (
+        <DeliveryQrModal
+          delivery={qrModalDelivery}
+          onClose={() => setQrModalDelivery(null)}
+        />
+      )}
     </main>
   );
 }

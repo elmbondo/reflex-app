@@ -75,7 +75,7 @@ function LoginView() {
                 className="btn-enter-portal-inline"
                 onClick={() => navigate(`/${user.role.toLowerCase()}`)}
               >
-                Go to {role} Dashboard →
+                Go to {role} Dashboard
               </button>
             </div>
           )}
@@ -200,7 +200,7 @@ function LoginView() {
         <div className="login-register-prompt">
           <span>New to Reflex?</span>
           <Link to="/register" className="btn-register-link">
-            Apply for Role Registration →
+            Apply for Role Registration
           </Link>
         </div>
 

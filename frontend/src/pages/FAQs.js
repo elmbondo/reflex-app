@@ -87,7 +87,7 @@ function FAQs() {
                   {i === faqs.length - 1 && (
                     <p style={{ marginTop: '10px' }}>
                       <Link to="/support" style={{ color: '#c85a32', fontWeight: '700' }}>
-                        Go to Support Form →
+                        Go to Support Form
                       </Link>
                     </p>
                   )}

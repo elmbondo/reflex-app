@@ -127,7 +127,7 @@ function AdminView() {
         {/* Header */}
         <div style={{ marginBottom: '14px' }}>
           <Link to="/" style={{ textDecoration: 'none', color: 'var(--color-terracotta, #c85a32)', fontWeight: 600, fontSize: '0.9rem', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-            ← Back to Home
+            Back to Home
           </Link>
         </div>
 
@@ -429,7 +429,7 @@ function AdminView() {
                               )}
 
                               {app.status === 'approved' && (
-                                <span className="action-tag-done">✓ Verified</span>
+                                <span className="action-tag-done">Verified</span>
                               )}
                             </>
                           )}

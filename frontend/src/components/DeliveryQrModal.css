@@ -1,0 +1,175 @@
+/* DeliveryQrModal.css — QR Delivery Pass for Retailers */
+
+.delivery-qr-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(28, 25, 23, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: qr-fade-in 0.2s ease-out;
+}
+
+.delivery-qr-card {
+  background-color: var(--color-white, #ffffff);
+  border: 1px solid var(--color-border, #eae3d9);
+  border-radius: var(--radius-xl, 24px);
+  max-width: 440px;
+  width: 100%;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(28, 25, 23, 0.22);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.delivery-qr-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.delivery-qr-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-terracotta-light, #fbf0ea);
+  color: var(--color-terracotta, #c85a32);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: var(--radius-full, 9999px);
+  margin-bottom: 4px;
+}
+
+.delivery-qr-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-charcoal, #1c1917);
+  letter-spacing: -0.02em;
+}
+
+.delivery-qr-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border, #eae3d9);
+  background-color: var(--color-sand-light, #f5efeb);
+  color: var(--color-text-muted, #57534e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delivery-qr-close:hover {
+  background-color: var(--color-border, #eae3d9);
+  color: var(--color-charcoal, #1c1917);
+}
+
+.delivery-qr-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.delivery-qr-frame {
+  padding: 16px;
+  background-color: #ffffff;
+  border: 2px solid var(--color-border, #eae3d9);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: 0 4px 12px rgba(28, 25, 23, 0.06);
+  max-width: 212px;
+}
+
+.delivery-qr-code-text {
+  background-color: var(--color-sand-light, #f5efeb);
+  border: 1px solid var(--color-border, #eae3d9);
+  padding: 6px 14px;
+  border-radius: var(--radius-full, 9999px);
+  font-size: 0.8125rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.code-label {
+  font-weight: 600;
+  color: var(--color-text-muted, #57534e);
+}
+
+.code-value {
+  font-family: monospace;
+  font-weight: 700;
+  color: var(--color-charcoal, #1c1917);
+}
+
+.delivery-qr-meta {
+  width: 100%;
+  background-color: var(--color-sand-light, #f5efeb);
+  border-radius: var(--radius-md, 12px);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  font-size: 0.8125rem;
+}
+
+.meta-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.meta-label {
+  color: var(--color-text-muted, #57534e);
+  font-weight: 600;
+}
+
+.meta-val {
+  color: var(--color-charcoal, #1c1917);
+  font-weight: 700;
+  text-align: right;
+  word-break: break-word;
+}
+
+.delivery-qr-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+}
+
+.delivery-qr-footer p {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted, #57534e);
+  line-height: 1.4;
+}
+
+.btn-done-qr {
+  padding: 10px;
+  background-color: var(--color-terracotta, #c85a32);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-full, 9999px);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-done-qr:hover {
+  background-color: var(--color-terracotta-hover, #b24e2a);
+}
