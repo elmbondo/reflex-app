@@ -15,6 +15,19 @@ Both the **Frontend (React SPA)** and **Backend (Express API + Serverless Functi
 
 ---
 
+## 🔑 Pre-Configured Test Accounts
+
+The database is seeded with approved pre-configured test accounts for all 4 user roles:
+
+| Role | Email | Password | Access / Portal Capabilities |
+| :--- | :--- | :--- | :--- |
+| 🛡️ **Admin** | `admin@reflex.co.ke` | `Admin@Reflex2026!` | Full admin dashboard, user approvals, analytics |
+| 🛍️ **Retailer** | `testretailer@reflex.co.ke` | `Password123!` | Create & track package delivery requests |
+| 📦 **Dispatcher** | `testdispatcher@reflex.co.ke` | `Password123!` | Assign unassigned packages to riders |
+| 🛵 **Rider** | `testrider@reflex.co.ke` | `Password123!` | Accept jobs, pickup orders, scan QR code for delivery |
+
+---
+
 ## 🏗️ System Design & Workflow Architecture
 
 ### 1. System Architecture
