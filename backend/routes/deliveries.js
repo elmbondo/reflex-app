@@ -181,4 +181,25 @@ router.patch('/:id/status', async (req, res) => {
   }
 });
 
+// GET verify delivery by QR code (public — customer confirmation)
+router.get('/verify/:qrCode', async (req, res) => {
+  try {
+    const { qrCode } = req.params;
+    if (!qrCode) {
+      return res.status(400).json({ error: 'QR code is required' });
+    }
+    const delivery = await Delivery.findOne({ qrCodeValue: qrCode })
+      .populate('retailer', 'name phone role')
+      .populate('assignedRider', 'name phone role');
+
+    if (!delivery) {
+      return res.status(404).json({ error: 'No delivery found for this QR code' });
+    }
+    res.json(delivery);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to verify QR code' });
+  }
+});
+
 module.exports = router;
+
