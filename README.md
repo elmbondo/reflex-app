@@ -131,9 +131,9 @@ graph LR
 | Role | Portal Route | Primary Capabilities | Registration Details Required |
 |---|---|---|---|
 | **Admin** | `/admin` | • Review, approve, or reject applicants<br>• View system statistics and active accounts<br>• Filter applicants by role and approval status | Pre-seeded system administrator |
-| **Retailer** | `/retailer` | • Create new delivery orders<br>• Generate customer QR tokens for secure verification<br>• Live tracking of ongoing and completed parcels | Shop name, physical shop location, business type, phone number |
+| **Retailer** | `/retailer` | • Create delivery orders with compact form<br>• Toggle between **table** and **card** view modes<br>• **Live search** across active & completed parcels<br>• Paginated order history<br>• Generate & display **QR Delivery Pass** modal for each parcel | Shop name, physical shop location, business type, phone number |
 | **Dispatcher**| `/dispatcher`| • Monitor unassigned delivery pool<br>• View approved, available riders<br>• Assign riders to orders and monitor fleet status | Full name, phone number, operating hub / base address |
-| **Rider** | `/rider` | • View assigned delivery tasks<br>• Update delivery status (`Picked Up`, `In Transit`)<br>• Scan / verify customer QR code for final handoff | Motorcycle registration number, chassis/frame number, motorcycle model & color, phone number |
+| **Rider** | `/rider` | • View assigned delivery tasks<br>• Update delivery status (`Picked Up`, `In Transit`)<br>• **Optical barcode scanner** (camera + manual fallback) for QR handoff verification | Motorcycle registration number, chassis/frame number, motorcycle model & color, phone number |
 
 ---
 
@@ -209,6 +209,7 @@ reflex-app/
 │   ├── seedAdmin.js            # Admin seeding script with Google DNS resolver fallback
 │   ├── server.js               # Express server entry point with Socket.io & MongoDB
 │   ├── test_e2e.js             # 23-assertion automated end-to-end test suite
+│   ├── test_timing.js          # 19-operation architecture timing benchmark suite
 │   ├── package.json            # Backend dependencies & start scripts
 │   └── vercel.json             # Backend serverless configuration
 ├── frontend/
@@ -217,8 +218,12 @@ reflex-app/
 │   │   └── index.html          # HTML5 container with Google Fonts & SEO tags
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── Navigation.js   # Responsive navbar with auth badges & portal navigation
-│   │   │   └── ProtectedRoute.js # React Router RBAC and approval status guard
+│   │   │   ├── DeliveryQrModal.js  # Retailer-facing QR Delivery Pass modal (react-qr-code)
+│   │   │   ├── DeliveryQrModal.css # Modal card styles for QR pass display
+│   │   │   ├── Navigation.js       # Responsive navbar with auth badges & portal navigation
+│   │   │   ├── Navigation.css      # Navbar styling
+│   │   │   ├── QrScannerModal.js   # Rider-facing optical barcode scanner (html5-qrcode)
+│   │   │   └── QrScannerModal.css  # Scanner viewfinder & animated laser sweep styles
 │   │   ├── context/
 │   │   │   └── AuthContext.js  # Global authentication context & localStorage persistence
 │   │   ├── pages/
@@ -231,8 +236,8 @@ reflex-app/
 │   │   │   ├── LoginView.js    # JWT login form with automatic role redirection
 │   │   │   ├── PendingView.js  # Account application status monitor (Pending / Rejected)
 │   │   │   ├── RegisterView.js # Multi-step registration form with role-specific fields
-│   │   │   ├── RetailerView.js # Retailer delivery creation & live tracking dashboard
-│   │   │   ├── RiderView.js    # Rider workflow with QR scanner & status updates
+│   │   │   ├── RetailerView.js # Retailer dashboard — table/card views, live search, pagination & QR pass
+│   │   │   ├── RiderView.js    # Rider workflow with optical QR barcode scanner & status updates
 │   │   │   └── SupportView.js  # Public customer support contact form
 │   │   ├── api.js              # Axios instance with Bearer token interceptor
 │   │   ├── socket.js           # Shared Socket.io WebSocket instance
@@ -356,6 +361,54 @@ node test_e2e.js
 8. ✅ **Delivery Lifecycle**: Retailer creates order → Dispatcher assigns rider → Rider picks up parcel → Rider marks as delivered with QR verification.
 9. ✅ **Admin Stats**: Aggregate counts dynamically reflect state changes.
 10. ✅ **Support Tickets**: Public inquiries are submitted and persisted with assigned ticket IDs.
+
+---
+
+## ⏱️ Architecture Timing Benchmark Suite
+
+Run `backend/test_timing.js` against the live production API to measure latency across every architectural tier:
+
+```bash
+cd backend
+node test_timing.js
+```
+
+Runs **19 timed operations** and prints a formatted table with per-operation latency (ms):
+
+```
+⏱️ [PASS] | Infrastructure       | API Health Check / Gateway Ping      |  1108 ms | HTTP 200
+⏱️ [PASS] | Auth & Security      | Admin Sign-In & JWT Generation       |   673 ms | Role: admin
+⏱️ [PASS] | Role Registration    | Retailer Application Submission      |   889 ms | (Pending)
+⏱️ [PASS] | RBAC Security        | Pending User Login Gatekeeper (403)  |   656 ms | Correctly intercepted 403
+⏱️ [PASS] | Delivery Pipeline    | Create Delivery & Generate QR Token  |  1092 ms | Delivery created
+⏱️ [PASS] | Delivery Pipeline    | QR Verified Handoff -> Delivered     |  1311 ms | Verified: Delivered
+⏱️ [PASS] | Admin Management     | Aggregate Analytics & User Stats     |  2154 ms | Approved: 39
+...
+Total: 19 operations | ~24,381 ms cumulative | ~1,283 ms avg latency
+```
+
+Outputs a structured JSON timing report at the end for documentation and regression analysis.
+
+---
+
+## 📦 QR Code Feature Details
+
+### `DeliveryQrModal` (Retailer Portal)
+
+- Triggered when a retailer clicks **"View QR"** on any active delivery.
+- Displays a **180×180 SVG QR code** generated from the delivery's unique `qrCodeValue` token using `react-qr-code`.
+- Shows customer name, phone, destination address, and package description.
+- Includes an optical reference code label for manual fallback.
+- Customer presents this code to the Rider upon doorstep arrival.
+
+### `QrScannerModal` (Rider Portal)
+
+- Triggered when Rider initiates delivery confirmation.
+- Activates **device rear camera** using `html5-qrcode` library (`facingMode: 'environment'`).
+- Renders an animated **laser sweep viewfinder** with corner bracket overlays.
+- Auto-validates scanned code against the delivery's `qrCodeValue` — rejects mismatches.
+- Falls back to **manual code entry form** when camera is unavailable.
+- On successful match, calls `PATCH /api/deliveries/:id/status` with `status: "Delivered"` + the verified QR token.
 
 ---
 
