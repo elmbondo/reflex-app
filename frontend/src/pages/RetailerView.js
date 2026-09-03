@@ -27,6 +27,15 @@ function RetailerView() {
   const [isLoadingDeliveries, setIsLoadingDeliveries] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
   const [qrModalDelivery, setQrModalDelivery] = useState(null);
+  const [viewMode, setViewMode] = useState('table'); // Default to 'table'
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 5;
+
+  // Reset to page 1 on filter or search change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeFilter, searchQuery]);
 
   // Fetch past delivery requests
   const fetchDeliveries = useCallback(async () => {
@@ -196,12 +205,32 @@ function RetailerView() {
   const pendingCount = deliveries.filter((d) => d.currentStatus === 'Pending').length;
   const inProgressCount = deliveries.filter((d) => d.currentStatus === 'Assigned' || d.currentStatus === 'Picked Up').length;
   const completedCount = deliveries.filter((d) => d.currentStatus === 'Delivered').length;
-  const visibleDeliveries = deliveries.filter((d) => {
-    if (activeFilter === 'all') return true;
-    if (activeFilter === 'pending') return d.currentStatus === 'Pending';
-    if (activeFilter === 'delivered') return d.currentStatus === 'Delivered';
+  
+  // Filter & sort newest first
+  const filteredDeliveries = deliveries.filter((d) => {
+    if (activeFilter === 'pending' && d.currentStatus !== 'Pending') return false;
+    if (activeFilter === 'delivered' && d.currentStatus !== 'Delivered') return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      const nameMatch = (d.customerName || '').toLowerCase().includes(q);
+      const phoneMatch = (d.customerPhone || '').toLowerCase().includes(q);
+      const addrMatch = (d.address || '').toLowerCase().includes(q);
+      const itemMatch = (d.itemDescription || '').toLowerCase().includes(q);
+      const idMatch = (d._id || '').toLowerCase().includes(q);
+      return nameMatch || phoneMatch || addrMatch || itemMatch || idMatch;
+    }
     return true;
+  }).sort((a, b) => {
+    const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    return timeB - timeA;
   });
+
+  const totalPages = Math.max(1, Math.ceil(filteredDeliveries.length / ITEMS_PER_PAGE));
+  const paginatedDeliveries = filteredDeliveries.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   return (
     <main className="retailer-container" aria-label="Retailer Delivery Management">
@@ -353,161 +382,166 @@ function RetailerView() {
           ) : (
             /* Creation Form */
             <form className="delivery-form" onSubmit={handleSubmit} noValidate>
-              {/* Field 1: Customer Name */}
-              <div className="form-group">
-                <label className="form-label" htmlFor="customerName">
-                  Customer Name <span className="required-star">*</span>
-                </label>
-                <div className="input-wrapper">
-                  <span className="input-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                      <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                  </span>
-                  <input
-                    id="customerName"
-                    name="customerName"
-                    type="text"
-                    className={`form-input ${touched.customerName && errors.customerName ? 'input-error' : ''}`}
-                    placeholder="e.g. Wanjiku Kamau"
-                    value={form.customerName}
-                    onChange={(e) => handleChange('customerName', e.target.value)}
-                    onBlur={() => handleBlur('customerName')}
-                    disabled={isSubmitting}
-                    required
-                    aria-invalid={touched.customerName && Boolean(errors.customerName)}
-                    aria-describedby={errors.customerName ? 'customerName-error' : undefined}
-                  />
-                </div>
-                {touched.customerName && errors.customerName && (
-                  <div id="customerName-error" className="field-error-message" role="alert">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <line x1="12" y1="8" x2="12" y2="12"></line>
-                      <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
-                    {errors.customerName}
+              {/* Row 1: Customer Name & Phone */}
+              <div className="form-row-2col">
+                {/* Field 1: Customer Name */}
+                <div className="form-group">
+                  <label className="form-label" htmlFor="customerName">
+                    Customer Name <span className="required-star">*</span>
+                  </label>
+                  <div className="input-wrapper">
+                    <span className="input-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                      </svg>
+                    </span>
+                    <input
+                      id="customerName"
+                      name="customerName"
+                      type="text"
+                      className={`form-input ${touched.customerName && errors.customerName ? 'input-error' : ''}`}
+                      placeholder="e.g. Wanjiku Kamau"
+                      value={form.customerName}
+                      onChange={(e) => handleChange('customerName', e.target.value)}
+                      onBlur={() => handleBlur('customerName')}
+                      disabled={isSubmitting}
+                      required
+                      aria-invalid={touched.customerName && Boolean(errors.customerName)}
+                      aria-describedby={errors.customerName ? 'customerName-error' : undefined}
+                    />
                   </div>
-                )}
+                  {touched.customerName && errors.customerName && (
+                    <div id="customerName-error" className="field-error-message" role="alert">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                      </svg>
+                      {errors.customerName}
+                    </div>
+                  )}
+                </div>
+
+                {/* Field 2: Customer Phone */}
+                <div className="form-group">
+                  <label className="form-label" htmlFor="customerPhone">
+                    Customer Phone <span className="required-star">*</span>
+                  </label>
+                  <div className="input-wrapper">
+                    <span className="input-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                      </svg>
+                    </span>
+                    <input
+                      id="customerPhone"
+                      name="customerPhone"
+                      type="tel"
+                      className={`form-input ${touched.customerPhone && errors.customerPhone ? 'input-error' : ''}`}
+                      placeholder="e.g. 0712 345 678"
+                      value={form.customerPhone}
+                      onChange={(e) => handleChange('customerPhone', e.target.value)}
+                      onBlur={() => handleBlur('customerPhone')}
+                      disabled={isSubmitting}
+                      required
+                      aria-invalid={touched.customerPhone && Boolean(errors.customerPhone)}
+                      aria-describedby={errors.customerPhone ? 'customerPhone-error' : 'phone-helper'}
+                    />
+                  </div>
+                  {touched.customerPhone && errors.customerPhone && (
+                    <div id="customerPhone-error" className="field-error-message" role="alert">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                      </svg>
+                      {errors.customerPhone}
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {/* Field 2: Customer Phone */}
-              <div className="form-group">
-                <label className="form-label" htmlFor="customerPhone">
-                  Customer Phone <span className="required-star">*</span>
-                </label>
-                <div className="input-wrapper">
-                  <span className="input-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                    </svg>
-                  </span>
-                  <input
-                    id="customerPhone"
-                    name="customerPhone"
-                    type="tel"
-                    className={`form-input ${touched.customerPhone && errors.customerPhone ? 'input-error' : ''}`}
-                    placeholder="e.g. 0712 345 678"
-                    value={form.customerPhone}
-                    onChange={(e) => handleChange('customerPhone', e.target.value)}
-                    onBlur={() => handleBlur('customerPhone')}
-                    disabled={isSubmitting}
-                    required
-                    aria-invalid={touched.customerPhone && Boolean(errors.customerPhone)}
-                    aria-describedby={errors.customerPhone ? 'customerPhone-error' : 'phone-helper'}
-                  />
-                </div>
-                <div id="phone-helper" className="field-helper">Rider will call this number for delivery coordination</div>
-                {touched.customerPhone && errors.customerPhone && (
-                  <div id="customerPhone-error" className="field-error-message" role="alert">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <line x1="12" y1="8" x2="12" y2="12"></line>
-                      <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
-                    {errors.customerPhone}
+              {/* Row 2: Delivery Address & Package Details */}
+              <div className="form-row-2col">
+                {/* Field 3: Delivery Address */}
+                <div className="form-group">
+                  <label className="form-label" htmlFor="address">
+                    Delivery Address & Landmark <span className="required-star">*</span>
+                  </label>
+                  <div className="input-wrapper">
+                    <span className="input-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                      </svg>
+                    </span>
+                    <input
+                      id="address"
+                      name="address"
+                      type="text"
+                      className={`form-input ${touched.address && errors.address ? 'input-error' : ''}`}
+                      placeholder="e.g. Biashara Plaza 3rd Flr, Room 14, CBD"
+                      value={form.address}
+                      onChange={(e) => handleChange('address', e.target.value)}
+                      onBlur={() => handleBlur('address')}
+                      disabled={isSubmitting}
+                      required
+                      aria-invalid={touched.address && Boolean(errors.address)}
+                      aria-describedby={errors.address ? 'address-error' : undefined}
+                    />
                   </div>
-                )}
-              </div>
+                  {touched.address && errors.address && (
+                    <div id="address-error" className="field-error-message" role="alert">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                      </svg>
+                      {errors.address}
+                    </div>
+                  )}
+                </div>
 
-              {/* Field 3: Delivery Address */}
-              <div className="form-group">
-                <label className="form-label" htmlFor="address">
-                  Delivery Address & Landmark <span className="required-star">*</span>
-                </label>
-                <div className="input-wrapper">
-                  <span className="input-icon" aria-hidden="true" style={{ top: '14px' }}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                      <circle cx="12" cy="10" r="3"></circle>
-                    </svg>
-                  </span>
-                  <input
-                    id="address"
-                    name="address"
-                    type="text"
-                    className={`form-input ${touched.address && errors.address ? 'input-error' : ''}`}
-                    placeholder="e.g. Biashara Plaza 3rd Flr, Room 14, CBD"
-                    value={form.address}
-                    onChange={(e) => handleChange('address', e.target.value)}
-                    onBlur={() => handleBlur('address')}
-                    disabled={isSubmitting}
-                    required
-                    aria-invalid={touched.address && Boolean(errors.address)}
-                    aria-describedby={errors.address ? 'address-error' : undefined}
-                  />
-                </div>
-                {touched.address && errors.address && (
-                  <div id="address-error" className="field-error-message" role="alert">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <line x1="12" y1="8" x2="12" y2="12"></line>
-                      <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
-                    {errors.address}
+                {/* Field 4: Item Description */}
+                <div className="form-group">
+                  <label className="form-label" htmlFor="itemDescription">
+                    Item Description <span className="required-star">*</span>
+                  </label>
+                  <div className="input-wrapper">
+                    <span className="input-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="21 8 21 21 3 21 3 8"></polyline>
+                        <line x1="1" y1="3" x2="23" y2="3"></line>
+                        <path d="M10 12h4"></path>
+                      </svg>
+                    </span>
+                    <input
+                      id="itemDescription"
+                      name="itemDescription"
+                      type="text"
+                      className={`form-input ${touched.itemDescription && errors.itemDescription ? 'input-error' : ''}`}
+                      placeholder="e.g. 2x Ankara dresses in brown box"
+                      value={form.itemDescription}
+                      onChange={(e) => handleChange('itemDescription', e.target.value)}
+                      onBlur={() => handleBlur('itemDescription')}
+                      disabled={isSubmitting}
+                      required
+                      aria-invalid={touched.itemDescription && Boolean(errors.itemDescription)}
+                      aria-describedby={errors.itemDescription ? 'itemDescription-error' : undefined}
+                    />
                   </div>
-                )}
-              </div>
-
-              {/* Field 4: Item Description */}
-              <div className="form-group">
-                <label className="form-label" htmlFor="itemDescription">
-                  Item Description <span className="required-star">*</span>
-                </label>
-                <div className="input-wrapper">
-                  <span className="input-icon" aria-hidden="true" style={{ top: '14px' }}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="21 8 21 21 3 21 3 8"></polyline>
-                      <line x1="1" y1="3" x2="23" y2="3"></line>
-                      <path d="M10 12h4"></path>
-                    </svg>
-                  </span>
-                  <textarea
-                    id="itemDescription"
-                    name="itemDescription"
-                    className={`form-textarea ${touched.itemDescription && errors.itemDescription ? 'input-error' : ''}`}
-                    placeholder="e.g. 2x Ankara maxi dresses (medium parcel in brown packaging)"
-                    value={form.itemDescription}
-                    onChange={(e) => handleChange('itemDescription', e.target.value)}
-                    onBlur={() => handleBlur('itemDescription')}
-                    disabled={isSubmitting}
-                    rows="3"
-                    required
-                    aria-invalid={touched.itemDescription && Boolean(errors.itemDescription)}
-                    aria-describedby={errors.itemDescription ? 'itemDescription-error' : undefined}
-                  />
+                  {touched.itemDescription && errors.itemDescription && (
+                    <div id="itemDescription-error" className="field-error-message" role="alert">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                      </svg>
+                      {errors.itemDescription}
+                    </div>
+                  )}
                 </div>
-                {touched.itemDescription && errors.itemDescription && (
-                  <div id="itemDescription-error" className="field-error-message" role="alert">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <line x1="12" y1="8" x2="12" y2="12"></line>
-                      <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
-                    {errors.itemDescription}
-                  </div>
-                )}
               </div>
 
               {/* Submit Button */}
@@ -556,6 +590,41 @@ function RetailerView() {
               </div>
             </div>
             <div className="queue-header-actions">
+              <div className="view-mode-toggle" role="radiogroup" aria-label="View Mode">
+                <button
+                  type="button"
+                  className={`btn-view-toggle ${viewMode === 'grid' ? 'active' : ''}`}
+                  onClick={() => setViewMode('grid')}
+                  title="Grid Cards View"
+                  aria-label="Grid View"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                  </svg>
+                  <span>Grid</span>
+                </button>
+                <button
+                  type="button"
+                  className={`btn-view-toggle ${viewMode === 'table' ? 'active' : ''}`}
+                  onClick={() => setViewMode('table')}
+                  title="Table View"
+                  aria-label="Table View"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                  </svg>
+                  <span>Table</span>
+                </button>
+              </div>
+
               <button
                 type="button"
                 className="btn-refresh"
@@ -574,50 +643,126 @@ function RetailerView() {
             </div>
           </div>
 
-          {/* Quick Metrics */}
-          <div className="retailer-stats">
-            <div
-              className="stat-box"
-              onClick={() => setActiveFilter('all')}
-              style={{ cursor: 'pointer', border: activeFilter === 'all' ? '2px solid var(--color-olive)' : undefined }}
-            >
-              <div className="stat-number">{deliveries.length}</div>
-              <div className="stat-label">Total</div>
+          {/* Search & Quick Metrics Bar */}
+          <div className="queue-controls-bar">
+            <div className="search-input-wrapper">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="search-icon">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="text"
+                className="search-filter-input"
+                placeholder="Search requests by customer, address or package..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  className="search-clear-btn"
+                  onClick={() => setSearchQuery('')}
+                  title="Clear search"
+                >
+                  ×
+                </button>
+              )}
             </div>
-            <div
-              className="stat-box"
-              onClick={() => setActiveFilter('pending')}
-              style={{ cursor: 'pointer', border: activeFilter === 'pending' ? '2px solid var(--color-amber-dark)' : undefined }}
-            >
-              <div className="stat-number" style={{ color: 'var(--color-amber-dark)' }}>{pendingCount}</div>
-              <div className="stat-label">Pending</div>
-            </div>
-            <div
-              className="stat-box"
-              onClick={() => setActiveFilter('delivered')}
-              style={{ cursor: 'pointer', border: activeFilter === 'delivered' ? '2px solid var(--color-success)' : undefined }}
-            >
-              <div className="stat-number" style={{ color: 'var(--color-success)' }}>{completedCount}</div>
-              <div className="stat-label">Delivered</div>
+
+            <div className="retailer-stats">
+              <div
+                className={`stat-box ${activeFilter === 'all' ? 'active' : ''}`}
+                onClick={() => setActiveFilter('all')}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="stat-number">{deliveries.length}</div>
+                <div className="stat-label">Total</div>
+              </div>
+              <div
+                className={`stat-box ${activeFilter === 'pending' ? 'active' : ''}`}
+                onClick={() => setActiveFilter('pending')}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="stat-number" style={{ color: 'var(--color-amber-dark)' }}>{pendingCount}</div>
+                <div className="stat-label">Pending</div>
+              </div>
+              <div
+                className={`stat-box ${activeFilter === 'delivered' ? 'active' : ''}`}
+                onClick={() => setActiveFilter('delivered')}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="stat-number" style={{ color: 'var(--color-success)' }}>{completedCount}</div>
+                <div className="stat-label">Delivered</div>
+              </div>
             </div>
           </div>
 
           {/* Deliveries list */}
-          {visibleDeliveries.length === 0 ? (
+          {filteredDeliveries.length === 0 ? (
             <div className="empty-state">
               <svg className="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
                 <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
               </svg>
-              <h3 className="empty-state-title">No deliveries logged yet</h3>
+              <h3 className="empty-state-title">
+                {searchQuery ? 'No matching requests found' : 'No deliveries logged yet'}
+              </h3>
               <p className="empty-state-text">
-                Submit your first customer delivery request using the form to track rider dispatch.
+                {searchQuery ? 'Try clearing your search or filter keywords.' : 'Submit your first customer delivery request using the form.'}
               </p>
             </div>
+          ) : viewMode === 'table' ? (
+            <div className="requests-table-container">
+              <table className="requests-table">
+                <thead>
+                  <tr>
+                    <th>Ref / Date</th>
+                    <th>Customer Details</th>
+                    <th>Delivery Address</th>
+                    <th>Package Item</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedDeliveries.map((d) => (
+                    <tr key={d._id || `${d.customerName}-${d.createdAt || Math.random()}`}>
+                      <td className="cell-ref">
+                        <div className="ref-code">Ref: {d._id ? d._id.slice(-6).toUpperCase() : 'NEW'}</div>
+                        <div className="ref-date">
+                          {d.createdAt ? new Date(d.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Just now'}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="customer-cell-name">{d.customerName}</div>
+                        <div className="customer-cell-phone">{d.customerPhone}</div>
+                      </td>
+                      <td className="cell-address">{d.address}</td>
+                      <td className="cell-item">{d.itemDescription}</td>
+                      <td>
+                        <span className={`status-badge ${getStatusBadgeClass(d.currentStatus)}`}>
+                          <span className="status-badge-dot" aria-hidden="true"></span>
+                          {d.currentStatus || 'Pending'}
+                        </span>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          className="btn-qr-pass"
+                          onClick={() => setQrModalDelivery(d)}
+                        >
+                          QR Pass
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
-            <ul className="requests-list" aria-label="Deliveries list">
-              {visibleDeliveries.map((d) => (
-                <li key={d._id || `${d.customerName}-${d.createdAt || Math.random()}`} className="request-item">
+            <div className="requests-grid" aria-label="Deliveries grid">
+              {paginatedDeliveries.map((d) => (
+                <div key={d._id || `${d.customerName}-${d.createdAt || Math.random()}`} className="request-card">
                   <div className="request-top">
                     <div className="customer-name">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-terracotta)' }}>
@@ -657,31 +802,68 @@ function RetailerView() {
                     )}
                   </div>
 
-                  <div className="request-meta" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div>
-                      <span>Ref: {d._id ? d._id.slice(-6).toUpperCase() : 'PENDING'}</span>
-                      <span>{d.createdAt ? new Date(d.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Just now'}</span>
+                  <div className="request-meta">
+                    <div className="meta-left">
+                      <span className="ref-pill">#{d._id ? d._id.slice(-6).toUpperCase() : 'NEW'}</span>
+                      <span className="date-text">
+                        {d.createdAt ? new Date(d.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Just now'}
+                      </span>
                     </div>
                     <button
                       type="button"
+                      className="btn-qr-pass"
                       onClick={() => setQrModalDelivery(d)}
-                      style={{
-                        background: 'none',
-                        border: '1px solid var(--color-border)',
-                        borderRadius: 'var(--radius-full)',
-                        padding: '3px 10px',
-                        fontSize: '0.75rem',
-                        fontWeight: 700,
-                        color: 'var(--color-terracotta)',
-                        cursor: 'pointer'
-                      }}
                     >
                       QR Pass
                     </button>
                   </div>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
+          )}
+
+          {/* Pagination Controls */}
+          {filteredDeliveries.length > ITEMS_PER_PAGE && (
+            <div className="pagination-bar">
+              <div className="pagination-info">
+                Showing {Math.min(filteredDeliveries.length, (currentPage - 1) * ITEMS_PER_PAGE + 1)}-
+                {Math.min(filteredDeliveries.length, currentPage * ITEMS_PER_PAGE)} of {filteredDeliveries.length} requests
+              </div>
+              <div className="pagination-actions">
+                <button
+                  type="button"
+                  className="btn-page"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                  aria-label="Previous Page"
+                >
+                  ← Prev
+                </button>
+
+                <div className="page-numbers">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                    <button
+                      key={pageNum}
+                      type="button"
+                      className={`btn-page-num ${pageNum === currentPage ? 'active' : ''}`}
+                      onClick={() => setCurrentPage(pageNum)}
+                    >
+                      {pageNum}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  className="btn-page"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                  aria-label="Next Page"
+                >
+                  Next →
+                </button>
+              </div>
+            </div>
           )}
         </section>
       </div>
