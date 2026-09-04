@@ -22,14 +22,17 @@ app.use(express.json());
 
 // Database connection logic
 let isConnected = false;
-const DEFAULT_MONGO_URI = 'mongodb+srv://fidelmahmbondo_db_user:TMBLj6N2uxIVKe4M@reflex-cluster.srcq3y7.mongodb.net/reflex?retryWrites=true&w=majority';
 
 const connectDB = async () => {
   if (isConnected || mongoose.connection.readyState >= 1) {
     return;
   }
   try {
-    const uri = process.env.MONGO_URI || DEFAULT_MONGO_URI;
+    const uri = process.env.MONGO_URI;
+    if (!uri) {
+      console.error('MongoDB connection error: MONGO_URI environment variable is not defined.');
+      return;
+    }
     await mongoose.connect(uri, {
       serverSelectionTimeoutMS: 5000
     });
